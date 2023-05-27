@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Res Partner Financial Statement Report Server Action -->
+        <record id="res_partner_financial_report_action" model="ir.actions.server">
+            <field name="name">Estado de Situación Financiera</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="binding_model_id" ref="base.model_res_partner"/>
+            <field name="binding_view_types">form</field>
+            <field name="state">code</field>
+            <field name="code">action = record.action_financial_statement(record)</field>
+        </record>
+        
+        <record id="email_template_report_state" model="mail.template">
+            <field name="name">Estado de Cuenta - Cuentas por Cobrar</field>
+            <field name="model_id" ref="cr_financial_statement_report.model_res_partner"/>
+            <!-- <field name="email_from">${(object.company_id.email |safe)}</field> -->
+            <field name="email_from">${object.env.user.email_formatted | safe}</field>
+            <field name="email_to" >${object.send_email}</field>
+            <!-- para enviar al mail verdadero -->
+            <!-- <field name="email_to" >${(object.employee_id.work_email |safe)}</field> -->
+            <field name="subject">${object.subject_email}</field>
+            <field name="auto_delete" eval="False"/>
+
+            <field name="body_html">${object.body_email}</field>
+
+            <field name="report_template"  ref="cr_financial_statement_report.report_state_client"/>
+            <!-- <field name="report_name">${(object.name)}</field> -->
+        </record>
+        
+    </data>
+</odoo>

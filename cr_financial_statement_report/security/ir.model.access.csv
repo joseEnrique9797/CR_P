@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_financial_statement_wizard_user,cr_financial_statement_report.financial.statement.wizard,model_financial_statement_wizard,base.group_user,1,1,1,1
+access_report_cr_financial_statement_report_financial_report_user,cr_financial_statement_report.report.cr_financial_statement_report.financial_report,model_report_cr_financial_statement_report_financial_report,base.group_user,1,1,1,1

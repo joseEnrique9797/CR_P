@@ -1,0 +1,12 @@
+<odoo>
+    <report
+        id="action_financial_statement_report"
+        model="res.partner"
+        string="Financial Statement Report XLSX"
+        report_type="xlsx"
+        name="cr_financial_statement_report.financial_report"
+        file="Financial_Statement_Report"
+        attachment_use="False"
+        menu="False"
+    />
+</odoo>

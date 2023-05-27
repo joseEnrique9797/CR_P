@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_account_state_template">
+            <t t-call="web.basic_layout">
+                
+                <div class="header">
+                    <table border="0" cellspacing="0" cellpadding="0" style="width:100%;">
+                      <tr>
+
+                          <td width="43"><img  height="82" t-att-src="image_data_uri(o.env.company.logo)"/></td>
+                          <td style="text-align:center;">
+                              <p style="font-size:14px;">REGULACION Y MANEJO DE FLUIDOS DE COSTA RICA SOCIEDAD ANONIMA</p>
+                              <p style="font-size:14px;">Estado de Cuenta - Cuentas por Cobrar</p>
+                          </td>
+                          <td style = "display:none;" width="30" ><img height="80" t-att-src="image_data_uri(o.env.company.logo)"/></td>
+
+                      </tr>
+                    </table>
+                        
+                  
+                </div>
+                <div class="page">
+                    
+                    <div>
+                        <h6>Fecha de corte:  <span t-esc="o.get_datetime_now()" /> </h6>
+                        <table class = "table">
+                            <tr>
+                                <td style = "background-color:#D9E1F2">CÓDIGO</td>
+                                <td> <span t-esc="o.code" /> </td>
+                                <td style = "background-color:#D9E1F2">PLAZO CRÉDITO</td>
+                                <td> <span t-esc="o.property_payment_term_id.name" />  </td>
+                            </tr>
+                            
+                            <tr>
+                                <td style = "background-color:#D9E1F2">CLIENTE</td>
+                                <td> <span t-esc="o.name" /> </td>
+                                <td style = "background-color:#D9E1F2">LIMITE CRÉDITO</td>
+                                <td style = "text-align:right" >  <span t-esc="'{:,.2f}'.format(o.get_limite_tarifa_credito())"  /> </td>
+                            </tr>
+                            
+                            <tr>
+                                <td style = "background-color:#D9E1F2">CONTRIBUYENTE</td>
+                                <td> <span t-esc="o.vat" /> </td>
+                                <td style = "background-color:#D9E1F2">TOTAL CRÉDITO</td>
+                                <td style = "text-align:right"> <span t-esc="'{:,.2f}'.format(o.get_total_mont_convert())"  />  </td>
+                            </tr>
+                            
+                            <tr>
+                                <td style = "background-color:#D9E1F2">DIRECCIÓN</td>
+                                <td> <span t-esc="o.contact_address_complete" />  </td>
+                                <td style = "background-color:#D9E1F2">DISPONIBLE</td>
+                                <td style = "text-align:right"> <span t-esc="'{:,.2f}'.format( o.get_restante(o.get_limite_tarifa_credito()) )" /></td>
+                            </tr>
+                            
+                            <tr>
+                                <td style = "background-color:#D9E1F2">VENDEDOR</td>
+                                <td> <span t-if = "o.user_id.name" t-esc="o.user_id.name" />  </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    
+                    <table class = "table">
+                        <thead>
+                            <th style = "background-color:#D9E1F2; width: 150px !important; min-width: 160px !important">FEHCA EMISIÓN</th>
+                            <th style = "background-color:#D9E1F2">DÍAS CRÉDITO</th>
+                            <th style = "background-color:#D9E1F2">FECHA VENCIMIENTO</th>
+                            <th style = "background-color:#D9E1F2">REFERENCIA</th>
+                            <th style = "background-color:#D9E1F2">MONEDA ORIGEN</th>
+                            <th style = "background-color:#D9E1F2">IMPORTE</th>
+                            <th style = "background-color:#D9E1F2; max-width: 160px !important">ABONOS/DEVOLUCIONES</th>
+                            <th style = "background-color:#D9E1F2">SALDO ACTUAL</th>
+                            <th style = "background-color:#D9E1F2">ESTADO</th>
+                            <th style = "background-color:#D9E1F2">DÍAS DE VENCIMIENTO</th>
+                        </thead>
+                        <tbody>
+                            <t t-set="u_sum_amount_total" t-value="0"/>
+                            <t t-set="u_rest_amount_total_amount_residual" t-value="0"/>
+                            <t t-set="u_sum_amount_residual" t-value="0"/>
+                            
+                            <t t-set="c_sum_amount_total" t-value="0"/>
+                            <t t-set="c_rest_amount_total_amount_residual" t-value="0"/>
+                            <t t-set="c_sum_amount_residual" t-value="0"/>
+                            <t t-foreach="o.get_accounts_partner()" t-as="line">
+                                
+                                <t t-set="total_days_ven" t-value="o.get_total_days_ven(line.invoice_date_due)"/>
+                                <tr>
+                                    <td><span t-esc="line.invoice_date" /> </td>
+                                    <td> 30 </td>
+                                    <td> <span t-esc="line.invoice_date_due" /> </td>
+                                    <td> <span t-esc="line.name" /> </td>
+                                    <td> <span t-esc="line.currency_id.name" /> </td>
+                                    <td style = "text-align:right"> <span t-esc="line.amount_total" /> </td>
+                                    <td style = "text-align:right"> <span t-esc="line.amount_total  - line.amount_residual" /> </td>
+                                    <td style = "text-align:right"> <span t-esc="line.amount_residual" /> </td>
+
+                                    <td t-if = "total_days_ven &lt;= 0"> No vencido </td>
+                                    <td t-if = "total_days_ven > 0"> Vencido </td>
+                                    
+                                    <td> <span t-esc="total_days_ven" />  </td>
+                                    
+                                </tr>
+                                <t t-if = "line.currency_id.name == 'CRC'">
+                                    <t t-set="c_sum_amount_total" t-value="c_sum_amount_total + line.amount_total "/>
+                                    <t t-set="c_rest_amount_total_amount_residual" t-value="c_rest_amount_total_amount_residual + (line.amount_total  - line.amount_residual)"/>
+                                    <t t-set="c_sum_amount_residual" t-value="c_sum_amount_residual + line.amount_residual"/>
+                                </t>
+                                
+                                <t t-if = "line.currency_id.name == 'USD'">
+                                    <t t-set="u_sum_amount_total" t-value="u_sum_amount_total + line.amount_total "/>
+                                    <t t-set="u_rest_amount_total_amount_residual" t-value="u_rest_amount_total_amount_residual + (line.amount_total  - line.amount_residual)"/>
+                                    <t t-set="u_sum_amount_residual" t-value="u_sum_amount_residual + line.amount_residual"/>
+                                </t>
+                                
+                                
+                                    
+                                
+                            </t>
+                            
+                            <tr style = "background-color:#D9E1F2">
+                                <td> </td>
+                                <td> </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  CRC </td>
+                                <td style = "text-align:right" > <span t-esc="'{:,.2f}'.format(c_sum_amount_total)" /> </td>
+                                <td style = "text-align:right" > <span t-esc="'{:,.2f}'.format(c_rest_amount_total_amount_residual)" /> </td>
+                                <td style = "text-align:right" > <span t-esc="'{:,.2f}'.format(c_sum_amount_residual)" /> </td>
+
+                                <td></td>
+                                
+                                <td> </td>
+                            </tr>
+                            
+                            <tr style = "background-color:#D9E1F2">
+                                <td> </td>
+                                <td> </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  USD </td>
+                                <td style = "text-align:right" > <span t-esc="'{:,.2f}'.format(u_sum_amount_total)" /> </td>
+                                <td style = "text-align:right" > <span t-esc="'{:,.2f}'.format(u_rest_amount_total_amount_residual)" /> </td>
+                                <td style = "text-align:right" > <span t-esc="'{:,.2f}'.format(u_sum_amount_residual)" /> </td>
+
+                                <td></td>
+                                
+                                <td> </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                    <br></br>
+                    <h3>Información para Depósitos</h3>
+                    <h6>Razón social :  <span t-esc="o.env.company.name" /> </h6>
+                    <h6>Información para Depósitos :  <span t-esc="o.env.company.vat" /> </h6>
+                    <table class = "table" style = "width:50% !important">
+                        <thead>
+                            <th>BANCO</th>
+                            <th>MONEDA</th>
+                            <th>IBAN</th>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="o.get_lines_payment()" t-as="lp">
+                                <tr>
+                                    <td><span t-esc="lp.bank_id.name" /> </td>
+                                    <td><span t-esc="lp.currency_id.name" /></td>
+                                    <td> <span t-esc="lp.acc_number" /> </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                        
+                    </table>
+                </div>
+            </t>
+        </template>
+                
+        <template id="report_account_state_client">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="cr_financial_statement_report.report_account_state_template"/>
+            </t>
+        </template>
+        
+        <record id="report_state_client" model="ir.actions.report">
+            <field name="name">Estado de Cuenta - Cuentas por Cobrar</field>
+            <field name="model">res.partner</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">cr_financial_statement_report.report_account_state_client</field>
+            <field name="report_file">cr_financial_statement_report.report_account_state_client</field>
+            <field name="print_report_name">'%s'%(object.name)</field>
+            <field name="binding_model_id" ref="model_res_partner"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>
