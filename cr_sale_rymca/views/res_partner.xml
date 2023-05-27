@@ -1,0 +1,26 @@
+<odoo>
+  <data>
+        <record model="ir.ui.view" id="res_partner_inherited_form">
+            <field name="name">res.partner.inherited.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <xpath expr="//group[2]" position="after">
+                    <group>
+                        <field name="for_rtop_report"/>
+                        <field name="for_cro_report"/>
+                        
+                    </group>
+                </xpath>
+                
+                <xpath expr="//group[2]/field[@name='website']" position="before">
+                    <field name="fax"/>
+                    <field name="po_box"/>
+                </xpath>
+                
+            </field>
+        </record>
+      
+  </data>
+</odoo>

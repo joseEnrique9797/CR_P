@@ -1,0 +1,43 @@
+<odoo>
+  <data>
+    
+      <record model="ir.ui.view" id="purchase_order_inherited_form">
+            <field name="name">purchase.order.inherited.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form" />
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='currency_id']" position="after">
+                    <field name="type" force_save = "1" string="Tipo" attrs="{'readonly':[('type','!=','default')]}"/>
+                    <field name="note_description"/>
+                    <field name="notify_to" widget="many2many_tags"/>
+                    <field name="ship_to"/>
+                    <field name="bill_to"/>
+                    <field name="rtop_partner_id"/>
+                    
+                </xpath>
+                <xpath expr="//group[2]" position="inside">
+                    <field name="is_import" string="Importación" />
+                    <field name="import_states_id" string="Estado de Importación" attrs="{'invisible': [('is_import','=',False)]}" domain="[('active_state','=',True)]"/>
+                    <field name="contact" />
+                    <field name="quote_number" />
+                    <field name="ref_project" />
+                    <field name="ship_to_crop_id"/>
+                    <field name="bill_to_crop_id"/>
+                    <field name="crop_partner_id"/>
+                </xpath>
+                
+                <xpath expr="//page[@name='purchase_delivery_invoice']" position="inside">
+                    <field name="po_description" nolabel="1" widget="html"/>
+                </xpath>
+                
+                <xpath expr="//field[@name='name']" position="replace">
+                    <field name="name" readonly="1" force_save = "1"/>
+                </xpath>
+                
+                
+            </field>
+        </record>
+      
+  </data>
+</odoo>

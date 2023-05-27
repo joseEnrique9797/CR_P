@@ -1,0 +1,46 @@
+<odoo>
+    <data>
+        
+        <record id="import_state_view_form" model="ir.ui.view">
+                <field name="name">import.state.view.form</field>
+                <field name="model">import.states</field>
+                <field name="arch" type="xml">
+                <form string="Estados de Importación">
+                    <group>
+                        <group>
+                           <field name="name" string="Nombre" required="1"/>
+                        </group>
+                        <group>
+                           <field name="active_state" string="Activo"/>
+                        </group>
+                    </group>
+                 </form>
+              </field>
+          </record>
+        
+        <record id="import_states_view_tree" model="ir.ui.view">
+           <field name="name">import.states.tree</field>
+           <field name="model">import.states</field>
+           <field name="arch" type="xml">
+               <tree>
+                   <field name="name" string="Nombre"/>
+                   <field name="active_state" string="Activo"/>
+               </tree>
+           </field>
+        </record>
+        
+        <record id="action_import_states" model="ir.actions.act_window">
+           <field name="name">Estados de Importación</field>
+           <field name="res_model">import.states</field>
+           <field name="view_mode">tree,form</field>
+           <field name="help" type="html">
+               <p class="o_view_nocontent_smiling_face">
+                   Create Import State
+               </p>
+           </field>
+        </record>
+        
+        <menuitem id="import_states_menu" name="Estados de Importación" parent="purchase.menu_purchase_config" action="action_import_states" sequence="50"/>
+      
+    </data>
+</odoo> 

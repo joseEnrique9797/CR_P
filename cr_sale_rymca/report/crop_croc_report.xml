@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <template id="report_croc_crop_document">
+           
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    
+                    <style type="text/css"> 
+                        * {
+                            margin:0; 
+                            padding:0; 
+                            text-indent:0; 
+                        }
+                        
+                        .s1 { color: black; font-family:"Times New Roman", serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 10pt; }
+                        h1 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 12pt; }
+                        .s2 { color: black; font-family:"Times New Roman", serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 12pt; }
+                        .s3 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 8.5pt; }
+                        .s4 { color: black; font-family:"Times New Roman", serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 8.5pt; }
+                        p { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 7pt; margin:0pt; }
+                        .s5 { color: black; font-family:"Times New Roman", serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 10pt; }
+                        h2 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 10pt; }
+                        .h3, h3 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 9.5pt; }
+                        .s6 { color: black; font-family:"Times New Roman", serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 9.5pt; }
+                        .s7 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 9pt; }
+                        .s8 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 10pt; }
+                        .s9 { color: black; font-family:"Times New Roman", serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 9pt; }
+                        .s10 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 7.5pt; }
+                        .s11 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 8pt; }
+                        .s12 { color: black; font-family:"Times New Roman", serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 8pt; }
+                        .s13 { color: black; font-family:"Times New Roman", serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 7.5pt; }
+                        .s14 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 8pt; vertical-align: 1pt; }
+                        .s15 { color: black; font-family:"Times New Roman", serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 8pt; vertical-align: 1pt; }
+                        .s16 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 8.5pt; vertical-align: -2pt; }
+                        .s17 { color: black; font-family:"Times New Roman", serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 8.5pt; vertical-align: -2pt; }
+                        .s18 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 8.5pt; }
+                        .s19 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 7pt; vertical-align: 1pt; }
+                        h4 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 9pt; }
+                        .s20 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 7pt; }
+                        a { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 9pt; }
+                        .s21 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 8.5pt; }
+                        li {display: block; }
+                        #l1 {padding-left: 0pt;counter-reset: c1 1; }
+                        #l1&gt; li&gt;*:first-child:before {counter-increment: c1; content: counter(c1, decimal)" "; color: black; font-style: normal; font-weight: normal; text-decoration: none; }
+                        #l1&gt; li:first-child&gt;*:first-child:before {counter-increment: c1 0;  }
+                        li {display: block; }
+                        #l2 {padding-left: 0pt;counter-reset: d1 1; }
+                        #l2&gt; li&gt;*:first-child:before {counter-increment: d1; content: counter(d1, decimal)". "; color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 7pt; }
+                        #l2&gt; li:first-child&gt;*:first-child:before {counter-increment: d1 0;  }
+                        .strike {
+                            display: block;
+                            text-align: center;
+                            overflow: hidden;
+                            white-space: nowrap; 
+                        }
+                        
+                        .strike &gt; span {
+                            position: relative;
+                            display: inline-block;
+                        }
+                        
+                        .strike &gt; span:before,
+                        .strike &gt; span:after {
+                            content: "";
+                            position: absolute;
+                            top: 50%;
+                            width: 9999px;
+                            height: 1px;
+                            background: black;
+                        }
+                        
+                        .strike &gt; span:before {
+                            right: 100%;
+                            margin-right: 15px;
+                        }
+                        
+                        .strike &gt; span:after {
+                            left: 100%;
+                            margin-left: 15px;
+                        }
+                    </style>
+                    
+                    <h1 style="padding-left: 12pt;text-align: left;">
+                      <table border="0" cellspacing="0" cellpadding="0" style="width:100%;">
+                          <tr>
+                              <t>
+                                  <td style="width:33%;float:left;">
+                                      <img width="95" height="80" t-att-src="image_data_uri(o.crop_partner_id.image_1920)"/>
+                                  </td>
+                                  <td style="vertical-align: top;">
+                                      <p style="text-indent: 0pt;text-align: center;font-size:16px;font-weight: bold;">ORDEN DE COMPRA</p>
+                                      <p style="text-indent: 0pt;text-align: center;font-size:16px;font-weight: bold;" t-field="o.name"></p>
+                                      <p style="text-indent: 0pt;text-align: center;font-size:16px;font-weight: bold;" t-field="o.company_id.name"></p>
+                                  </td>
+                                  <td style="width:42% !important;float:right; ">
+                                      <h6 style = "color:transparent;">test </h6>
+<!--                                       <img width="95" height="80" t-att-src="image_data_uri(o.rtop_partner_id.image_1920)"/> -->
+                                  </td>
+                              </t>
+                          </tr>
+                      </table>
+                    </h1>
+                    
+                    <div style="height:50px;"/>
+                    <div>
+                        <table border="0" cellspacing="0" cellpadding="0" style="width:100%">
+                            <tr>
+                                <td style="width:15%;"> <span style="font-weight:bold;">Señores: </span></td>
+                                <td style="width:50%;"> <span t-field="o.partner_id.name"/> </td>
+                                <td style="text-align:right;width:15%;font-weight:bold;">Fecha: </td>
+                                <td style="width:20%;text-align:center;"> <span t-field="o.date_order"/> </td>
+                            </tr>
+                            <tr>
+                                <td style="width:15%;"> <span style="font-weight:bold;">Atención a: </span></td>
+                                <td style="width:50%;"> <span/> </td>
+                                <td style="text-align:right;width:15%;font-weight:bold;">Página: </td>
+                                <td style="width:20%;text-align:center;"> <span>1</span> </td>
+                            </tr>
+                            <tr>
+                                <td style="width:15%;"> <span style="font-weight:bold;">Teléfono: </span></td>
+                                <td style="width:50%;"> <span t-field="o.partner_id.phone"/> </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center;" colspan="2"> <span style="font-weight:bold;">Dirección: </span><span t-field="o.partner_id.contact_address_complete"/></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div style="height:30px;"/>
+                    
+                    <table style="width:100%;border:2px solid black;">
+                        <thead style="border:2px solid black;">
+                            <tr>
+                              Sirvase a entregar lo siguiente, bajo las instrucciones mencionadas
+                            </tr>
+                            <tr style="border-bottom:2px solid black;"> <td colspan="7"></td></tr>
+                            <tr style="font-size:14px;font-weight:bold;text-align:center;">
+                              <th>Item</th>
+                              <th>Código</th>
+                              <th>Código Catálogo</th>
+                              <th>Descripción</th>
+                              <th>Cantidad Ordenada</th>
+                              <th>Precio Unitario</th>
+                              <th>Importe Total</th>
+                            </tr>
+                        </thead>  
+                        <tbody style="border:2px solid black;">
+                            <t t-set="i" t-value="1"/>
+                            <t t-set="total" t-value="0"/>
+                            <t t-foreach="o.order_line" t-as="line"> 
+                              <tr style="font-size:13px;border:2px solid black;">
+                                  <td style="width:5%;text-align:center;" t-esc="i"/>
+                                  <td style="width:8%;text-align:center;" t-esc="line.product_id.default_code"/>
+                                  <td style="width:10%;text-align:center;"><span t-esc="'False'"/></td>
+                                  <td><p style="font-size:13px;width:95%;" t-esc="line.name"/></td>
+                                  <td style="width:10%;text-align:center;" t-esc="line.product_qty"/>
+                                  
+                                  
+                                  
+                                  <td style="width:10%;text-align:center;">
+                                      <span t-esc="o.currency_id.symbol"/> <span t-field="line.price_unit"/>
+                                  </td>
+                                  <td style="width:10%;text-align:center;">
+                                      <span t-field="line.price_subtotal"/>
+                                  </td>
+<!--                                   <td style="width:10%;text-align:center;" t-esc="line.price_subtotal" t-esc-options="{'widget': 'monetary', 'display_currency': 'o.currency'}"/> -->
+                              </tr>
+                              <t t-set="i" t-value="i+1"/>
+                              <t t-set="total" t-value="total+line.price_subtotal"/>
+                            </t> 
+                        </tbody>
+                    </table>
+                    
+                    <table border="0" cellspacing="0" cellpadding="0" style="width:100%">
+                        <tr>
+                            <td style="width:85%;text-align:right;"> <span>Total Mercadería: </span></td>
+                            <td style="width:15%;text-align:right;"> <span t-field="o.amount_untaxed"/> </td>
+                        </tr>
+                        <tr>
+                            <td style="width:85%;text-align:right;"> <span>Descuento: </span></td>
+                            <td style="width:15%;text-align:right;"> <span t-esc="0.0" /> </td>
+                        </tr>
+                        <tr>
+                            <td style="width:85%;text-align:right;"> <span>Impuesto de Ventas: </span></td>
+                            <td style="width:15%;text-align:right;"> <span t-field="o.amount_tax" /> </td>
+                        </tr>
+                        <tr>
+                            <td style="width:85%;text-align:right;"> <span>Flete: </span></td>
+                            <td style="width:15%;text-align:right;"> <span t-esc="0.0" /> </td>
+                        </tr>
+                        <tr>
+                            <td style="width:85%;text-align:right;"> <span style="font-weight:bold;">Total: </span></td>
+                            <td style="width:15%;text-align:right;"> <span t-field="o.amount_total"/> </td>
+                        </tr>
+                    </table>
+                    
+                    <div style="color:black;" t-raw="o.get_clean_html()"/>
+                                        
+                
+                <div class="footer">
+                    <div style="font-size:14px;padding:5px;width:100%;font-family: 'Times New Roman';text-align:center;">
+                        Tel: 40018718  Dir: Ofibodega #3  Los Higuerones Radial Santa Ana-Belén, 200 E Carls Junior, Pozos Santa Ana
+                    </div>
+                </div>
+            </div>
+                
+            </t>
+        </template>
+
+        <template id="croc_crop_report">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="cr_sale_rymca.report_croc_crop_document"/>
+            </t>
+        </template>
+   
+        <record id="croc_crop_paperformat" model="report.paperformat">
+            <field name="name">CROC/CROP</field>
+            <field name="default" eval="True" />
+            <field name="format">Letter</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">15</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">1</field>
+            <field name="dpi">90</field>
+        </record>
+        
+        <record id="report_purchase_croc_crop" model="ir.actions.report">
+            <field name="name">CROC</field>
+            <field name="model">purchase.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">cr_sale_rymca.croc_crop_report</field>
+            <field name="report_file">cr_sale_rymca.croc_crop_report</field>
+            <field name="print_report_name">'%s'%(object.name)</field>
+            <field name="binding_model_id" ref="model_purchase_order"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="cr_sale_rymca.croc_crop_paperformat" />
+        </record>
+        
+<!--         <record id="report_purchase_croc_crop_new" model="ir.actions.report">
+            <field name="name">CROP</field>
+            <field name="model">purchase.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">cr_sale_rymca.purchase_badgemeter_report</field>
+            <field name="report_file">cr_sale_rymca.purchase_badgemeter_report</field>
+            <field name="print_report_name">'%s'%(object.name)</field>
+            <field name="binding_model_id" ref="model_purchase_order"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="cr_sale_rymca.croc_crop_paperformat" />
+        </record> -->
+    </data>
+</odoo>

@@ -1,0 +1,36 @@
+<odoo>
+    
+    <data noupdate="1">
+        <record id="seq_purchase_order_croc" model="ir.sequence">
+            <field name="name">CROC Sequence</field>
+            <field name="code">purchase.order.croc</field>
+            <field name="prefix">CROC</field>
+            <field name="padding">5</field>
+            <field name="implementation">standard</field>
+            <field name="active">True</field>
+       </record>
+    </data>
+    
+    <data noupdate="1">
+        <record id="seq_purchase_order_rtop" model="ir.sequence">
+            <field name="name">RTOP Sequence</field>
+            <field name="code">purchase.order.rtop</field>
+            <field name="prefix">RTOP</field>
+            <field name="padding">5</field>
+            <field name="implementation">standard</field>
+            <field name="active">True</field>
+       </record>
+    </data>
+    
+    <data noupdate="1">
+        <record id="seq_purchase_order_crop" model="ir.sequence">
+            <field name="name">CROP Sequence</field>
+            <field name="code">purchase.order.crop</field>
+            <field name="prefix">CROP</field>
+            <field name="padding">5</field>
+            <field name="implementation">standard</field>
+            <field name="active">True</field>
+       </record>
+    </data>
+    
+</odoo>

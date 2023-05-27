@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <template id="report_badgemeter_crop_document">
+            <t t-call="web.basic_layout">
+<!--                 external_layout_standard -->
+                <div class="page">
+                    
+                    <style type="text/css"> 
+                        * {
+                            margin:0; 
+                            padding:0; 
+                            text-indent:0; 
+                        }
+                        
+                        .s1 { color: black; font-family:"Times New Roman", serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 10pt; }
+                        h1 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 12pt; }
+                        .s2 { color: black; font-family:"Times New Roman", serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 12pt; }
+                        .s3 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 8.5pt; }
+                        .s4 { color: black; font-family:"Times New Roman", serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 8.5pt; }
+                        p { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 7pt; margin:0pt; }
+                        .s5 { color: black; font-family:"Times New Roman", serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 10pt; }
+                        h2 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 10pt; }
+                        .h3, h3 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 9.5pt; }
+                        .s6 { color: black; font-family:"Times New Roman", serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 9.5pt; }
+                        .s7 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 9pt; }
+                        .s8 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 10pt; }
+                        .s9 { color: black; font-family:"Times New Roman", serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 9pt; }
+                        .s10 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 7.5pt; }
+                        .s11 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 8pt; }
+                        .s12 { color: black; font-family:"Times New Roman", serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 8pt; }
+                        .s13 { color: black; font-family:"Times New Roman", serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 7.5pt; }
+                        .s14 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 8pt; vertical-align: 1pt; }
+                        .s15 { color: black; font-family:"Times New Roman", serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 8pt; vertical-align: 1pt; }
+                        .s16 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 8.5pt; vertical-align: -2pt; }
+                        .s17 { color: black; font-family:"Times New Roman", serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 8.5pt; vertical-align: -2pt; }
+                        .s18 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 8.5pt; }
+                        .s19 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 7pt; vertical-align: 1pt; }
+                        h4 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 9pt; }
+                        .s20 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 7pt; }
+                        a { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 9pt; }
+                        .s21 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 8.5pt; }
+                        li {display: block; }
+                        #l1 {padding-left: 0pt;counter-reset: c1 1; }
+                        #l1&gt; li&gt;*:first-child:before {counter-increment: c1; content: counter(c1, decimal)" "; color: black; font-style: normal; font-weight: normal; text-decoration: none; }
+                        #l1&gt; li:first-child&gt;*:first-child:before {counter-increment: c1 0;  }
+                        li {display: block; }
+                        #l2 {padding-left: 0pt;counter-reset: d1 1; }
+                        #l2&gt; li&gt;*:first-child:before {counter-increment: d1; content: counter(d1, decimal)". "; color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 7pt; }
+                        #l2&gt; li:first-child&gt;*:first-child:before {counter-increment: d1 0;  }
+                        .strike {
+                            display: block;
+                            text-align: center;
+                            overflow: hidden;
+                            white-space: nowrap; 
+                        }
+                        
+                        .strike &gt; span {
+                            position: relative;
+                            display: inline-block;
+                        }
+                        
+                        .strike &gt; span:before,
+                        .strike &gt; span:after {
+                            content: "";
+                            position: absolute;
+                            top: 50%;
+                            width: 9999px;
+                            height: 1px;
+                            background: black;
+                        }
+                        
+                        .strike &gt; span:before {
+                            right: 100%;
+                            margin-right: 15px;
+                        }
+                        
+                        .strike &gt; span:after {
+                            left: 100%;
+                            margin-left: 15px;
+                        }
+                    </style>
+                    
+                    <h1 style="padding-left: 12pt;text-align: left;">
+                        
+                          <table border="0" cellspacing="0" cellpadding="0" style="width:100%;">
+                              <tr>
+                                  
+                                  <t t-if="o.crop_partner_id">
+<!--                                       <td style="width:50%;"><img width="95" height="80" t-att-src="image_data_uri(o.crop_partner_id.image_1920)"/></td> -->
+                                      <td style="width:50%;"><img width="95" height="80" t-att-src="image_data_uri(o.crop_partner_id.image_1920)"/></td>
+                                      <td style="width:50%;text-align:right;vertical-align: top;">
+                                            <p style="font-size:10px;"><span t-field="o.crop_partner_id.street"/></p>
+                                            <p style="font-size:10px;"><span t-field="o.crop_partner_id.street2"/></p>
+                                            
+                                            <p style="font-size:10px;"><span t-field="o.crop_partner_id.state_id.name"/> / <span t-field="o.crop_partner_id.country_id.name"/> </p>
+                                            
+                                            <p style="font-size:10px;"><span t-field="o.crop_partner_id.city"/></p>
+                                            <p style="font-size:10px;">Tel: <span t-field="o.crop_partner_id.phone"/></p>
+                                            <p style="font-size:10px;">P.O. Box <span t-field="o.crop_partner_id.po_box"/></p>
+
+                                      </td>
+                                  </t>
+                              </tr>
+                          </table>
+                        
+                        <p style="text-indent: 0pt;text-align: center;font-size:20px;font-weight: bold;">PURCHASE ORDER </p>
+                    </h1>
+                    
+                    <div class="float-right">
+                        <p style="text-indent: 0pt;line-height: 15pt;text-align: left;" class="s12">P.O. NUMBER <span style="font-family:'Times New Roman', serif;padding-left: 7pt;text-indent: 7pt;line-height: 109%;text-align: left;font-weight: bold; font-size: 12pt;" t-field="o.name"/></p>
+                        <p class="s7">REF. NUMBER <span style="font-family:'Times New Roman', serif;padding-left: 7pt;text-indent: 7pt;line-height: 109%;text-align: left;font-weight: bold; font-size: 12pt;" t-field="o.partner_ref"/></p>
+                        <p class="s7" style="padding-top: 6pt;padding-left: 1pt;text-indent: 0pt;text-align: left;">QUOTE NUMBER N <span style="padding-top: 6pt;padding-left: 7pt;text-indent: 0pt;text-align: left; font-size:12pt;" t-esc="o.quote_number"/></p>
+                        <p style="text-indent: 0pt;line-height: 15pt;text-align: left;" class="s12">REF. PROJECT <span style="padding-top: 6pt;padding-left: 7pt;text-indent: 0pt;text-align: left; font-size:12pt;" t-esc="o.ref_project"/></p>
+                        <p style="text-indent: 0pt;line-height: 15pt;text-align: left;" class="s12">DATE<span style="font-family:'Times New Roman', serif;padding-left: 7pt;text-indent: 7pt;line-height: 109%;text-align: left; font-size: 12pt;" t-field="o.date_order"/></p>
+                        <p class="s7" style="padding-top: 4pt;padding-right:18pt;text-align: right;font-size:12pt;">Page<span class="s9"> </span>1<span class="s9"> </span>of<span class="s9"> </span>2</p>
+                    </div>
+                    
+                    <div style="height:130px;"/>
+                    
+                    <table border="0" cellspacing="0" cellpadding="0" style="width:100%">
+                        <tr>
+                            <td style="text-align:left;width:50%;font-weight:bold;" colspan="2">Supplier Information</td>
+                            <td style="text-align:left;width:50%;font-weight:bold;">Bill To</td>
+                        </tr>
+                        
+                        
+                        <t t-if="o.crop_partner_id and o.type=='crop'">
+<!--                                                     o.crop_partner_id -->
+                            <tr style="font-size:12px;">
+                                <td> <span style="font-weight:bold;">To:</span></td>
+                                <td> <span t-field="o.partner_id.name"/> </td>
+<!--                                 <td> <span t-field="o.bill_to_crop_id.name"/> </td> -->
+                                <td> <span t-field="o.crop_partner_id.name"/> </td>
+                            </tr>
+                            <tr style="font-size:12px;">
+                                <td> <span style="font-weight:bold;">Contact:</span></td>
+                                <td> <span  t-esc="o.contact.name"/> </td>
+<!--                                 <td> <span t-field="o.bill_to_crop_id.street"/> </td> -->
+                                <td> Cedula Jurídica: <span t-field="o.crop_partner_id.vat"/> </td>
+                            </tr>
+                            <tr style="font-size:12px;"  t-if = "o.crop_partner_id.street">
+                                <td> <span style="font-weight:bold;">Tel:</span></td>
+                                <td> <span t-field="o.partner_id.phone"/> </td>
+<!--                                 <td>  <span t-field="o.bill_to_crop_id.street2"/>  </td> -->
+                                <td>  <span t-field="o.crop_partner_id.street"/>  </td>
+                            </tr>
+                            <tr style="font-size:12px;" t-if = "o.crop_partner_id.street2">
+                                <td> <span style="font-weight:bold;">Fax:</span></td>
+                                <td> <span t-field="o.partner_id.fax"/> </td>
+<!--                                 <td>  <span t-field="o.bill_to_crop_id.city"/>  </td> -->
+                                <td>  <span t-field="o.crop_partner_id.street2"/>  </td>
+                            </tr>
+                            
+                            <tr style="font-size:12px;">
+                                <td> </td>
+                                <td> </td>
+<!--                                 <td>  <span t-field="o.bill_to_crop_id.city"/>  </td> -->
+                                <td>  <span t-field="o.crop_partner_id.l10n_cr_edi_canton_id.name"/>,<span t-field="o.crop_partner_id.l10n_cr_edi_district_id.name"/>, <span t-field="o.crop_partner_id.state_id.name"/> ,  <span t-field="o.crop_partner_id.zip"/> </td>
+                            </tr>
+                            
+                            <tr style="font-size:12px;">
+                                <td> </td>
+                                <td> </td>
+<!--                                 <td>  <span t-field="o.bill_to_crop_id.city"/>  </td> -->
+                                <td> Contact: 
+                                    <t t-foreach="o.crop_partner_id.child_ids.filtered(lambda inv: inv.type == 'contact')" t-as="n_line"> 
+                                        <span t-field="n_line.name"/>,
+                                    </t>
+                                </td>
+                            </tr>
+                            
+                            <tr style="font-size:12px;">
+                                <td> </td>
+                                <td> </td>
+<!--                                 <td>  <span t-field="o.bill_to_crop_id.city"/>  </td> -->
+                                <td> Email : 
+                                    <t t-foreach="o.crop_partner_id.child_ids.filtered(lambda inv: inv.type == 'contact')" t-as="n_line"> 
+                                        <span t-field="n_line.email"/>,
+                                    </t>
+                                </td>
+                            </tr>
+                            
+                            <tr style="font-size:12px;">
+                                <td> </td>
+                                <td> </td>
+<!--                                 <td>  <span t-field="o.bill_to_crop_id.city"/>  </td> -->
+                                <td> Phone : <span t-field="o.crop_partner_id.phone"/>,
+                                    <t t-foreach="o.crop_partner_id.child_ids.filtered(lambda inv: inv.type == 'contact')" t-as="n_line"> 
+                                        <span t-field="n_line.phone"/>,
+                                    </t>
+                                </td>
+                            </tr>
+                            
+                        </t>
+                        
+                        <tr style="font-size:12px;">
+                            <td> <span style="font-weight:bold;">Reference:</span></td>
+                            <td> <span  t-esc="o.partner_ref"/> </td>
+                            <td/>
+                        </tr>
+                        <tr style="font-size:12px;">
+                            <td> <span style="font-weight:bold;">Payment:</span></td>
+                            <td> <span t-field="o.payment_term_id"/> </td>
+                            <td/>
+                        </tr>
+                    </table>
+                    
+                    <div style="height:5px;"/>
+                    
+                    
+                    
+                    
+                    
+                    <table border="0" cellspacing="0" cellpadding="0" style="width:100%">
+                        <tr>
+                            <td style="text-align:center;width:100%;font-weight:bold;" colspan="2">Shipping Instructions</td>
+                        </tr>
+                        
+                        
+                        <tr style="font-size:14px;">
+                            <td> 
+                                <table>
+                                    <tr>
+                                        <td> <span style="font-weight:bold;width:50%;">Consignee:</span></td>
+                                    </tr>
+                                    
+                                    <t t-if="o.crop_partner_id and o.type=='crop'">
+                                        <tr style="font-size:14px;">
+                                            <td> <span t-field="o.crop_partner_id.name"/> </td>
+                                        </tr>
+                                        
+                                        <tr style="font-size:14px;">
+                                            <td> Cedula Jurídica: <span t-field="o.crop_partner_id.vat"/> </td>
+                                        </tr>
+                                        
+                                        <tr style="font-size:14px;">
+                                            <td>  <span t-field="o.crop_partner_id.street"/>  </td>
+                                        </tr>
+                                        
+                                        <tr style="font-size:14px;">
+                                            <td>  <span t-field="o.crop_partner_id.street2"/>  </td>
+                                        </tr>
+                                        
+                                       
+<!--                                         <tr style="font-size:14px;">
+                                            <td> <span style="font-weight:bold;"> <span t-esc="o.ship_to_crop_id.street"/> </span></td>
+                                        </tr>
+                                        <tr style="font-size:14px;">
+                                            <td> <span style="font-weight:bold;"><span t-esc="o.ship_to_crop_id.street2"/></span></td>
+                                        </tr>
+                                        <tr style="font-size:14px;">
+                                            <td> <span style="font-weight:bold;"><span t-esc="o.ship_to_crop_id.mobile"/></span></td>
+                                        </tr>
+
+                                        <tr style="font-size:14px;">
+                                            <td> <span style="font-weight:bold;"><span t-esc="o.ship_to_crop_id.phone"/></span></td>
+                                        </tr>
+                                        <tr style="font-size:14px;">
+                                            <td> <span style="font-weight:bold;"> <span t-esc="o.ship_to_crop_id.name"/></span></td>
+                                        </tr> -->
+                                    </t>
+                                    
+                                    <tr>
+                                        <td> <span style="font-weight:bold;width:50%;">Incoterm: <span t-esc="o.incoterm_id.name"/> </span></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            
+                            <td>
+                                <table>
+                                    <tr style="font-size:14px;">
+                                        <td> <span style="font-weight:bold;width:50%;">Notify To:</span></td>
+                                    </tr>
+                                    
+                                    <tr style="font-size:14px;">
+                                        
+                                        <td>
+                                            <table>
+                                                
+                                                    <t t-foreach="o.notify_to" t-as="ntf"> 
+                                                        <tr>
+                                                            <td>
+                                                                <span t-esc="ntf.name"/>  / Email <span t-esc="ntf.email"/>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+                                                
+                                            </table>
+                                        </td>
+
+                                    </tr>
+                                </table>
+                            </td>
+                            
+                        </tr>
+                        
+                        
+                        
+                        
+                        
+                        
+                       
+                        
+                    </table>
+                    
+                    <div style="height:10px;"/>
+                    <table border="0" cellspacing="0" cellpadding="0" style="width:100%">
+                        <thead>
+                            <tr style="font-size:14px;">
+                              <th>Item</th>
+                              <th>Cod. Prov </th>
+                              <th>Description</th>
+                              <th>Qty</th>
+                              <th>Price</th>
+                              <th>Total Cost</th>
+                            </tr>
+                        </thead>  
+                        <tbody>
+                            <t t-set="i" t-value="1"/>
+                            <t t-set="total" t-value="0"/>
+                            <t t-foreach="o.order_line" t-as="line"> 
+                              <tr style="font-size:13px;">
+                                  <td style="width:5%;" t-esc="i"/>
+                                  
+                                  <td style="width:10%;"> 
+                                      <span t-if ="line.product_id.seller_ids" t-esc="line.product_id.seller_ids[0].product_code"/>
+                                      
+                                  </td>
+<!--                                   <td t-if =" line.product_id.seller_ids and not line.product_id.seller_ids[0].product_code" style="width:10%;" t-esc="'Not code'"/> -->
+                                  
+                                  
+                                  <td><p style="font-size:13px;width:95%;" t-esc="line.name"></p></td>
+                                  <td style="width:5%;" t-esc="line.product_qty"/>
+                                  
+                                  <td style="width:10%;text-align:center;">
+                                      <span t-esc="o.currency_id.symbol"/> <span t-field="line.price_unit"/>
+                                  </td>
+                                  
+                                  <td style="width:10%;text-align:center;">
+                                    <span t-field="line.price_subtotal"/>
+                                  </td>
+                                  
+<!--                                   <td style="width:5%;" t-esc="line.price_unit" t-esc-options="{'widget': 'monetary', 'display_currency': 'o.currency'}"/>
+                                  <td style="width:10%;" t-esc="line.price_subtotal" t-esc-options="{'widget': 'monetary', 'display_currency': 'o.currency'}"/> -->
+                              </tr>
+                              <t t-set="i" t-value="i+1"/>
+                              <t t-set="total" t-value="total+line.price_subtotal"/>
+                            </t> 
+                            <tr><td colspan="6"><br/></td></tr>
+                            <tr style="font-weight:bold;font-size:14px;">
+                              <td/>
+<!--                               <td>Notes:</td> -->
+                              <td/><td/>
+                              <td>Total</td>
+                                <td style="width:10%;text-align:center;">
+                                      <span t-esc="o.currency_id.symbol"/> <span  t-esc="'{:,}'.format(total)"  />
+                                  </td>
+<!--                               <td t-esc="total"/> -->
+                            </tr>
+                            <tr style="font-weight:bold;font-size:14px;">
+                              <td/>
+<!--                               <td colspan="5" style="color:red;">FINAL DESTINATION PANAMA</td> -->
+                            </tr>
+                            <tr style="font-weight:bold;font-size:14px;">
+                              <td/>
+<!--                               <td colspan="5" style="color:red;">CUSTOMER IMPLOSA</td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div style="height:80px;"/>
+                    <div style="width:88%;">
+                      <p style="font-size:14px;">The provider agrees to the conditions of this PO and should sent in a period no longer than 48 hours via mail the</p>
+                      <p style="font-size:14px;">acknowledgement of this Order to the following emails: logistica@rymca.com</p>
+                      <p style="font-size:14px;">Please review the terms and conditions on the back of this document</p>
+                    </div>
+                    
+                    <p style="page-break-after:always;"/>
+
+                    <header>
+                        <p style="text-indent: 0pt;text-align: left;"><br/></p>
+                        <p class="s7" style="padding-top: 3pt;text-indent: 0pt;text-align: right;">Page 2 of 2</p>
+                        <p class="s3" style="text-indent: 0pt;text-align: center;font-size:14px;">TERMS AND CONDITIONS</p>
+                        <p style="text-indent: 0pt;text-align: left;"><br/></p>
+                    </header>
+                    
+                    
+                    
+                <ol id="l2" style="font-size:12px;">
+            			<li style="font-size:12px;" data-list-text="1.">
+            			  <p style="padding-left: 23pt;text-indent: -17pt;line-height: 113%;text-align: left;font-size:12px;">ACCEPTANCE:   Seller’s written acknowledgement and acceptance must be returned properly executed within 3 days from the date of this purchase order (the “Order”). Shipment against this Order without formal acceptance constitutes acceptance of all terms and conditions stated herein.</p>
+            			</li>
+            			<li style="font-size:12px;" data-list-text="2.">
+            			  <p style="padding-left: 23pt;text-indent: -17pt;line-height: 113%;text-align: left;font-size:12px;">PRICES:  This Order shall not be billed at a higher price than reflected in this Order without the express, written consent of RMT entity indicated on the front of this Order (the “Buyer”).</p>
+            			</li>
+            			<li style="font-size:12px;" data-list-text="3.">
+            			  <p style="padding-left: 14pt;text-indent: -8pt;text-align: left;font-size:12px;">PACKAGING, FREIGHT, AND CARTAGE CHARGES: No charges are allowed for packing, freight, or cartage unless designated on this Order.</p>
+            			</li>
+            			<li style="font-size:12px;" data-list-text="4.">
+            			  <p style="padding-top: 1pt;padding-left: 23pt;text-indent: -17pt;line-height: 113%;text-align: left;font-size:12px;">QUALITY AND INSPECTION: All goods, equipment, and materials (collectively, “Goods”) furnished in connection with this Order must be as specified and will be subject to inspection and approval of Buyer.  Buyer reserves the right to reject and return at the risk and expense of the Seller such portion of any shipment which may be defective or fail to comply with Buyer ’s specifications without invalidating the remainder of the Order.  The rejected portion of any shipment will be held for disposition at expense and risk of Seller.  Payment for Goods described on this Order prior to inspection shall not constitute an acceptance thereof.</p>
+            			</li>
+            			<li style="font-size:12px;" data-list-text="5.">
+            				<p style="padding-left: 14pt;text-indent: -8pt;text-align: left;font-size:12px;">QUANTITY: The specific quantity of Goods ordered shall not be changed or modified without Buyer’s written consent.</p>
+            			</li>
+            			<li style="font-size:12px;" data-list-text="6.">
+            			  <p style="padding-top: 1pt;padding-left: 23pt;text-indent: -17pt;line-height: 113%;text-align: justify;font-size:12px;">NON-PERFORMANCE:  Buyer reserves the right to cancel this Order, or any portion of same, if delivery is not made when and as specified,  and charge Seller for any loss incurred by the Buyer.</p>
+            			</li>
+            			<li style="font-size:12px;" data-list-text="7.">
+            			  <p style="padding-left: 23pt;text-indent: -17pt;line-height: 113%;text-align: justify;font-size:12px;">INTELLECTUAL PROPERTY: Seller shall indemnify, defend or settle, at its own expense, any claim or suit against the Buyer alleging that the use or ownership of any Goods described in this Order infringes any copyright, patent, trademark or trade secret and agrees to pay all costs and damages arising out of any alleged infringement, claim, or suit arising therefrom.</p>
+            			</li>
+            			<li style="font-size:12px;" data-list-text="8.">
+            			  <p style="padding-left: 23pt;text-indent: -17pt;line-height: 113%;text-align: justify;font-size:12px;">BILLING/SHIPPING: Seller agrees: (a) to abide by the Buyer’s shipping instructions and, unless otherwise specifically stated, utilize the least expensive (but commercially reasonable) manner of shipment.  Seller shall provide Buyer with a bill of lading and invoice for such shipment;  (b) that the cash discount qualification term, if any, shall be calculated from the later of the date of invoice or the date on which the Goods are received by Buyer;  and</p>
+            			  <p style="padding-left: 23pt;text-indent: 0pt;text-align: justify;font-size:12px;">(c) to provide itemized packing list showing order numbers with each shipment.</p>
+            			</li>
+            			<li style="font-size:12px;" data-list-text="9.">
+            			  <p style="padding-top: 1pt;padding-left: 23pt;text-indent: -17pt;line-height: 113%;text-align: left;font-size:12px;">CHANGES:  Buyer shall have the right to make changes in this Order by delivering to Seller an amendment in writing setting forth the changes.  If such changes affect the cost of or the time required for the performance of this Order, an equitable adjustment in price or delivery, or both, shall be made and incorporated into the amendment to the Order.  If Seller does not within 7 days after receipt of said amendment object in writing,  said amendment shall be binding on Seller.</p>
+            			</li>
+            			<li style="font-size:12px;" data-list-text="10.">
+            			  <p style="padding-left: 23pt;text-indent: -17pt;line-height: 113%;text-align: justify;font-size:12px;">TIME IS OF THE ESSENCE: It is agreed that time is of the essence.  Seller represents that it shall deliver the goods, products or services by the date specific in this Order.  Seller agrees that if it shall fail to comply with such delivery date, Seller shall be liable for any damages or costs incurred by Buyer as a result of Seller’ failure to timely deliver under the Order.  In addition to recovery of damages and costs from Seller, Buyer may, in its sole and absolute discretion, cancel this Order. Nothing herein shall be construed to limit or restrict Buyer’s any and all rights that it may have under law.</p>
+            			</li>
+            			<li style="font-size:12px;" data-list-text="11.">
+            			  <p style="padding-left: 23pt;text-indent: -17pt;line-height: 113%;text-align: justify;font-size:12px;">MODIFICATION OF THIS AGREEMENT: This agreement shall not be changed or otherwise modified unless such change or modification is in writing and executed by an authorized agent of Buyer.</p>
+            			</li>
+            			<li style="font-size:12px;" data-list-text="12.">
+            			  <p style="padding-left: 23pt;text-indent: -17pt;line-height: 113%;text-align: justify;font-size:12px;">CANCELLATION:  Buyer may cancel this Order, in whole or in part, at any time for any cause and will reimburse Seller for his reasonable and necessary expenses incurred directly incident to this Order through the date of cancellation but shall not be liable for any consequential damages incurred in connection with the Order or portion thereof so cancelled.  In any event, such expenses shall not exceed the total price reflected in the Order.</p>
+            			</li>
+            			<li style="font-size:12px;" data-list-text="13.">
+            			  <p style="padding-left: 23pt;text-indent: -17pt;line-height: 113%;text-align: justify;font-size:12px;">COMPLIANCE WITH LAWS: Seller warrants and certifies that all Goods covered by this Order were produced or will be produced in compliance with all State, Federal and local laws, rules and regulations including without limitation all applicable requirements of:  ( a) the Federal Food, Drug and Cosmetic Act as amended and any similar Act of any State, Territory, or Municipality, (b) the Occupational Safety and Health Act, as amended (Seller shall furnish Buyer with an appropriate, fully completed Safety Data Sheet in the form provided for in said regulations ), and (c) the Federal Fair Labor Standards Act.</p>
+            			</li>
+            			<li style="font-size:12px;" data-list-text="14.">
+            			  <p style="padding-left: 23pt;text-indent: -17pt;line-height: 113%;text-align: justify;font-size:12px;">WARRANTIES:  Seller represents and warrants that the Goods provided hereunder are of good workmanship, design and materials and fit for the particular purpose for which purchased by Buyer.   Seller will indemnify, defend, and hold Buyer harmless against any and all losses, including but not limited to Buyer’s increased production cost and lost profits, damages, liabilities, claims and suits at law or in equity which may be made or brought against or suffered by Buyer by virtue of any defective material, workmanship or design in the Goods supplied hereunder.  Such warranties shall survive delivery and shall not be deemed waived either by Buyer ’s failure to discover defects, acceptance of Goods or payment therefore.  Such warranties shall cover all losses incurred by Buyer in connection with any defects in the Goods covered by this Order.</p>
+            			</li>
+            			<li style="font-size:12px;" data-list-text="15.">
+                    <p style="padding-left: 23pt;text-indent: -17pt;line-height: 113%;text-align: justify;font-size:12px;">Where duty drawbacks are applicable on Goods exported by the Buyer in connection with this Order, the Seller will make any necessary data available to the Buyer for such claim.</p>			
+                  </li>
+            			<li style="font-size:12px;" data-list-text="16.">
+            			  <p style="padding-left: 23pt;text-indent: -17pt;line-height: 113%;text-align: left;font-size:12px;">The parties agree, whether expressly, freely and spontaneously, that any claim or demand arising out of this contract shall be resolved in the first instance, necessarily, by the Center for Conciliation and Arbitration of the Chamber of Commerce of Costa Rica .</p>
+            			</li>
+		            </ol>
+                
+                <p style="padding-left: 23pt;text-indent: -17pt;line-height: 113%;text-align: left;font-size:12px;">The parties agree, whether expressly, freely and spontaneously, that any claim or demand arising out of this contract shall be resolved in accordance with the laws of the Republic of Costa Rica. The declaration of invalidity or illegality of any provision or clause of this Purchase Order shall not affect the strength, legality and enforce ability of the remaining clauses or provisions thereof. Also, the seller states that defend relieve and hold harmless the broadest Buyer and its representatives from any liability, claim, liability, expense, loss or damage.</p>
+		            <p style="text-indent: 0pt;text-align: left;"><br/></p>
+		            <p style="padding-left: 23pt;text-indent: -17pt;line-height: 113%;text-align: left;font-size:12px;">The Buyer expressly complies with the terms and conditions described above, and under the above signature this purchase order as a form of acceptance.</p>
+            		<p style="text-indent: 0pt;text-align: left;"><br/></p>
+            		<p style="text-indent: 0pt;text-align: left;"/>
+            		<p style="text-indent: 0pt;text-align: left;"/>
+            		
+            		<div class="strike">
+                   <span>U.L.</span>
+                </div>
+            		
+            		
+                </div>
+                
+                <div class="footer">
+                    <div style="background-color:#333399;color:white;font-size:14px;padding:5px;width:85%;">
+                        Subsidiarias: R&amp;M Costa Rica, R&amp;M Panamá, R&amp;M Honduras, R&amp;M Nicaragua, R&amp;M Guatemala, R&amp;M El Salvador
+                    </div>
+                    <div style="color:#333399;font-size:14px;padding:5px;width:85%;font-family: 'Times New Roman'">
+                        <i class="fa fa-tint" aria-hidden="true"></i><strong><i> La forma inteligente de usar el agua</i></strong>
+                    </div>
+                </div>
+                
+            </t>
+        </template>
+
+        <template id="purchase_badgemeter_crop_report">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="cr_sale_rymca.report_badgemeter_crop_document"/>
+            </t>
+        </template>
+   
+        <record id="paperformat_badgemeter" model="report.paperformat">
+            <field name="name">Badgemeter</field>
+            <field name="default" eval="True" />
+            <field name="format">Letter</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">15</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">1</field>
+            <field name="dpi">90</field>
+        </record>
+        
+        <record id="report_purchase_badgemeter_crop" model="ir.actions.report">
+            <field name="name">CROP</field>
+            <field name="model">purchase.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">cr_sale_rymca.purchase_badgemeter_crop_report</field>
+            <field name="report_file">cr_sale_rymca.purchase_badgemeter_crop_report</field>
+            <field name="print_report_name">'%s'%(object.name)</field>
+            <field name="binding_model_id" ref="model_purchase_order"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="cr_sale_rymca.paperformat_badgemeter" />
+        </record>
+    </data>
+</odoo>

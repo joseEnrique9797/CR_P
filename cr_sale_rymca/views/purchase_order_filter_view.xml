@@ -1,0 +1,24 @@
+<odoo>
+  <data>
+    
+      <record model="ir.ui.view" id="purchase_order_inherited_filter">
+            <field name="name">purchase.order.inherited.filter</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.view_purchase_order_filter" />
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <!-- Search -->
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="note_description" string="Descripción"/>
+                </xpath>
+                <!-- Filter -->
+                <xpath expr="//filter[@name='to_approve']" position="after">
+                    <separator/>
+                    <filter name="import_states_id" string="Estado de Importación" domain="[('import_states_id','!=',False)]"/>
+                </xpath>
+                
+            </field>
+        </record>
+      
+ </data>
+</odoo> 
