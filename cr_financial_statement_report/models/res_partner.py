@@ -17,22 +17,6 @@ class ResPartner(models.Model):
     subject_email  = fields.Char(string='Asunto')
     body_email = fields.Char(string='Cuerpo')
     
-    def get_total_days_ven(self, date):
-        result = 0
-        if date:
-            result = (datetime.now().date() - date).days
-        
-        return result
-        
-        
-    
-    def get_lines_payment(self):
-        company = self.env['res.company'].search([
-            ('id','>',0)
-        ], limit = 0)
-        
-        return company.partner_id.bank_ids
-    
     def get_datetime_now(self):
         return datetime.now().date()
         

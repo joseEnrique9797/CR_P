@@ -23,8 +23,8 @@ class RetentionReportXls(models.AbstractModel):
         format24 = workbook.add_format({'font_size': 10, 'align': 'left', 'right': True, 'left': True,'bottom': True, 'top': True, 'bold': False, 'text_wrap': True, 'num_format': '#,##0.00'})
         
         format30 = workbook.add_format({'font_size': 10, 'align': 'left', 'right': True, 'left': True,'bottom': False, 'top': True, 'bold': True, 'text_wrap': True,'bg_color':'#D9E1F2'})
-        format31 = workbook.add_format({'font_size': 10, 'align': 'right', 'right': True, 'left': True,'bottom': False, 'top': False, 'bold': True, 'text_wrap': True,'bg_color':'#D9E1F2'})
-        format32 = workbook.add_format({'font_size': 10, 'align': 'right', 'right': True, 'left': True,'bottom': True, 'top': False, 'bold': True, 'text_wrap': True,'bg_color':'#D9E1F2'})
+        format31 = workbook.add_format({'font_size': 10, 'align': 'left', 'right': True, 'left': True,'bottom': False, 'top': False, 'bold': True, 'text_wrap': True,'bg_color':'#D9E1F2'})
+        format32 = workbook.add_format({'font_size': 10, 'align': 'left', 'right': True, 'left': True,'bottom': True, 'top': False, 'bold': True, 'text_wrap': True,'bg_color':'#D9E1F2'})
         format33 = workbook.add_format({'font_size': 10, 'align': 'left', 'right': True, 'left': True,'bottom': True, 'top': True, 'bold': True, 'text_wrap': True,'bg_color':'#D9E1F2'})
         
         format34 = workbook.add_format({'font_size': 10, 'valign':'middle', 'align': 'center', 'right': False, 'left': True,'bottom': True, 'top': True, 'bold': True, 'text_wrap': True,'bg_color':'#D9E1F2'})
@@ -38,10 +38,9 @@ class RetentionReportXls(models.AbstractModel):
         
         
         format40 = workbook.add_format({'font_size': 10, 'align': 'left', 'right': True, 'left': True,'bottom': False, 'top': True, 'bold': True, 'text_wrap': True})
-        format41 = workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'align': 'right', 'right': True, 'left': True,'bottom': False, 'top': False, 'bold': True, 'text_wrap': True})
+        format41 = workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'align': 'left', 'right': True, 'left': True,'bottom': False, 'top': False, 'bold': True, 'text_wrap': True})
         format42 = workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'align': 'left', 'right': True, 'left': True,'bottom': True, 'top': False, 'bold': True, 'text_wrap': True})
         format43 = workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'align': 'left', 'right': True, 'left': True,'bottom': True, 'top': True, 'bold': True, 'text_wrap': True})
-        format43_a = workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'align': 'right', 'right': True, 'left': True,'bottom': True, 'top': True, 'bold': True, 'text_wrap': True})
         
         format50 = workbook.add_format({'font_size': 10, 'align': 'left', 'right': False, 'left': False,'bottom': False, 'top': False, 'bold': True, 'text_wrap': False,'underline':1})
         format51 = workbook.add_format({'font_size': 10, 'align': 'left', 'right': False, 'left': False,'bottom': False, 'top': False, 'bold': True, 'text_wrap': True})
@@ -160,21 +159,33 @@ class RetentionReportXls(models.AbstractModel):
         
         total_devoluciones_colones = 0
         total_devoluciones_dolares = 0
-        
         for res in lines_account:
             sheet.write(row,0,str(res.invoice_date),format43)
             sheet.write(row,1,'30',format43)
             sheet.write(row,2, str(res.invoice_date_due),format43)
             sheet.write(row,3,res.name,format43)
             sheet.write(row,4,res.currency_id.name,format43)
-            sheet.write(row,5,res.amount_total,format43_a)
-            sheet.write(row,6, res.amount_total  - res.amount_residual  ,format43_a)
-            sheet.write(row,7, res.amount_residual  ,format43_a)
+            sheet.write(row,5,res.amount_total,format43)
+            sheet.write(row,6, res.amount_total  - res.amount_residual  ,format43)
+            sheet.write(row,7, res.amount_residual  ,format43)
             dev  =  res.amount_total - res.amount_residual 
+            state = 'Sin definir'
+            if res.state == 'draft':
+                state = 'Borrador'
             
-            days_due = 0
-            if res.invoice_payment_term_id and res.invoice_payment_term_id.line_ids:
+            elif res.state == 'posted':
+                state = 'Publicado'
+                
+            elif res.state == 'cancel':
+                state = 'Cancelada'
+            	
+            # invoice_date_due
+            sheet.write(row,8, state ,format43)
+            
+            if res and res.invoice_payment_term_id and res.invoice_payment_term_id.line_ids:
                 days_due = res.invoice_payment_term_id.line_ids[0].days
+            else:
+                days_due = 0
             date_ve = res.invoice_date + timedelta(days=int(days_due))
             
             dateresult = date_ve - res.invoice_date
@@ -186,25 +197,7 @@ class RetentionReportXls(models.AbstractModel):
                 dateresultdays = 0
             
             # raise ValidationError('esta es la data=========>%s' %dateresultdays)
-            
-            date_v_new =  datetime.strptime(data['date'],"%Y-%m-%d").date() - res.invoice_date_due
-            
-            
-            
-            
-            sheet.write(row,9,date_v_new,format43_a)
-            
-            
-            state = 'Sin definir'
-            if int(date_v_new.days) <= 0:
-                state = 'No vencido'
-            
-            elif int(date_v_new.days) > 0:
-                state = 'Vencido'
-                
-            
-            # invoice_date_due
-            sheet.write(row,8, state ,format43)
+            sheet.write(row,9,dateresultdays,format43)
             
             if res.currency_id.name == 'USD':
                 total_dolares += res.amount_residual
@@ -239,7 +232,7 @@ class RetentionReportXls(models.AbstractModel):
         sheet.write(9,9,round(total_mont_convert, 2),format41)
         
         restante = limite_tarifa_credito - total_mont_convert
-        sheet.write(10,9,round(restante, 2),format43_a)
+        sheet.write(10,9,round(restante, 2),format42)
         
         # Other Info
         
@@ -248,7 +241,7 @@ class RetentionReportXls(models.AbstractModel):
         sheet.write(row+2,0,'Razón social',format51)
         sheet.write(row+2,1,self.env.company.name,format52)
         sheet.write(row+3,0,'Cédula Jurídica',format51)
-        sheet.write(row+3,1, self.env.company.vat ,format52)
+        sheet.write(row+3,1,'0-000-000000',format52)
         
         
         row+=5
@@ -258,12 +251,37 @@ class RetentionReportXls(models.AbstractModel):
         row+=1
         
         
-        for lp in self.env.company.partner_id.bank_ids:
-            sheet.write(row,0,lp.bank_id.name,format43)
-            sheet.write(row,1,lp.currency_id.name,format43)
-            sheet.write(row,2,lp.acc_number,format43)
+        for bank_line in self.env.company.partner_id.bank_ids:
+            sheet.write(row,0,bank_line.bank_id.name,format43)
+            sheet.write(row,1,bank_line.currency_id.name,format43)
+            sheet.write(row,2,bank_line.acc_number,format43)
             row+=1
-            
+        # self.env.company.partner_id.bank_ids
+        
+        # sheet.write(row,0,'BAC',format43)
+        # sheet.write(row,1,'COL',format43)
+        # sheet.write(row,2,'CR59010200009025370183',format43)
+        # row+=1
+        # sheet.write(row,0,'BAC',format43)
+        # sheet.write(row,1,'DOL',format43)
+        # sheet.write(row,2,'CR81010200009025370757',format43)
+        # row+=1
+        # sheet.write(row,0,'BNCR',format43)
+        # sheet.write(row,1,'COL',format43)
+        # sheet.write(row,2,'CR09015104210010001211',format43)
+        # row+=1
+        # sheet.write(row,0,'BNCR',format43)
+        # sheet.write(row,1,'DOL',format43)
+        # sheet.write(row,2,'CR07015100010026174558',format43)
+        # row+=1
+        # sheet.write(row,0,'BCR',format43)
+        # sheet.write(row,1,'COL',format43)
+        # sheet.write(row,2,'CR81015201001013334024',format43)
+        # row+=1
+        # sheet.write(row,0,'BCR',format43)
+        # sheet.write(row,1,'DOL',format43)
+        # sheet.write(row,2,'CR74015201001013334538',format43)
+        
         row+=2
         sheet.write(row,0,'Notificaciones de Pago:',format51)
         
