@@ -188,13 +188,15 @@ class RetentionReportXls(models.AbstractModel):
                 days_due = 0
             date_ve = res.invoice_date + timedelta(days=int(days_due))
             
-            dateresult = date_ve - res.invoice_date
-            dateresultdays = dateresult.days
             
-            if dateresultdays < 0:
-                dateresultdays = dateresultdays*-1
-            else:
-                dateresultdays = 0
+            dateresult = datetime.now().date() - res.invoice_date_due
+            # dateresult = date_ve - res.invoice_date
+            dateresultdays = dateresult.days * -1
+            
+            # if dateresultdays < 0:
+            #     dateresultdays = dateresultdays*-1
+            # else:
+            #     dateresultdays = 0
             
             # raise ValidationError('esta es la data=========>%s' %dateresultdays)
             sheet.write(row,9,dateresultdays,format43)
