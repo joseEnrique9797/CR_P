@@ -153,6 +153,25 @@
                             
                         </tbody>
                     </table>
+                    
+                    
+                    <table class = "table">
+                        <thead>
+                            <th>BANCO</th>
+                            <th>MONEDA</th>
+                            <th>IBAN</th>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="o.env.company.partner_id.bank_ids" t-as="bank_line">
+                                <tr>
+                                    <td><span t-esc="bank_line.bank_id.name" /> </td>
+                                    <td> <span t-esc="bank_line.currency_id.name" /> </td>
+                                    <td> <span t-esc="bank_line.acc_number" /> </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    
 
                 </div>
             </t>

@@ -29,18 +29,18 @@ class RetentionReportXls(models.AbstractModel):
         
         format34 = workbook.add_format({'font_size': 10, 'valign':'middle', 'align': 'center', 'right': False, 'left': True,'bottom': True, 'top': True, 'bold': True, 'text_wrap': True,'bg_color':'#D9E1F2'})
         
-        format35= workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'valign':'middle', 'align': 'center', 'right': False, 'left': False,'bottom': True, 'top': False, 'bold': True, 'text_wrap': True,'bg_color':'#D9E1F2'})
-        format36= workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'valign':'middle', 'align': 'center', 'right': True, 'left': False,'bottom': False, 'top': True, 'bold': True, 'text_wrap': True,'bg_color':'#D9E1F2'})
-        format37= workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'valign':'middle', 'align': 'center', 'right': False, 'left': False,'bottom': False, 'top': True, 'bold': True, 'text_wrap': True,'bg_color':'#D9E1F2'})
+        format35= workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'valign':'middle', 'align': 'right', 'right': False, 'left': False,'bottom': True, 'top': False, 'bold': True, 'text_wrap': True,'bg_color':'#D9E1F2'})
+        format36= workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'valign':'middle', 'align': 'right', 'right': True, 'left': False,'bottom': False, 'top': True, 'bold': True, 'text_wrap': True,'bg_color':'#D9E1F2'})
+        format37= workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'valign':'middle', 'align': 'right', 'right': False, 'left': False,'bottom': False, 'top': True, 'bold': True, 'text_wrap': True,'bg_color':'#D9E1F2'})
         format38= workbook.add_format({'font_size': 10, 'valign':'middle', 'align': 'center', 'right': False, 'left': False,'bottom': True, 'top': True, 'bold': True, 'text_wrap': True,'bg_color':'#D9E1F2'})
         format39= workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'valign':'middle', 'align': 'center', 'right': True, 'left': False,'bottom': True, 'top': False, 'bold': True, 'text_wrap': True,'bg_color':'#D9E1F2'})
         
         
         
         format40 = workbook.add_format({'font_size': 10, 'align': 'left', 'right': True, 'left': True,'bottom': False, 'top': True, 'bold': True, 'text_wrap': True})
-        format41 = workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'align': 'left', 'right': True, 'left': True,'bottom': False, 'top': False, 'bold': True, 'text_wrap': True})
+        format41 = workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'align': 'right', 'right': True, 'left': True,'bottom': False, 'top': False, 'bold': True, 'text_wrap': True})
         format42 = workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'align': 'left', 'right': True, 'left': True,'bottom': True, 'top': False, 'bold': True, 'text_wrap': True})
-        format43 = workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'align': 'left', 'right': True, 'left': True,'bottom': True, 'top': True, 'bold': True, 'text_wrap': True})
+        format43 = workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'align': 'right', 'right': True, 'left': True,'bottom': True, 'top': True, 'bold': True, 'text_wrap': True})
         
         format50 = workbook.add_format({'font_size': 10, 'align': 'left', 'right': False, 'left': False,'bottom': False, 'top': False, 'bold': True, 'text_wrap': False,'underline':1})
         format51 = workbook.add_format({'font_size': 10, 'align': 'left', 'right': False, 'left': False,'bottom': False, 'top': False, 'bold': True, 'text_wrap': True})
