@@ -35,19 +35,24 @@ class ResPartner(models.Model):
         }
     
     
-    def get_dateresultdays(self, invoice_payment_term_id, invoice_date):
-        if invoice_payment_term_id and invoice_date:
+    def get_dateresultdays(self, invoice_payment_term_id, invoice_date_due):
+        if invoice_date_due:
             
-            days_due = invoice_payment_term_id.line_ids[0].days
-            date_ve = invoice_date + timedelta(days=int(days_due))
+#             days_due = invoice_payment_term_id.line_ids[0].days
+#             date_ve = invoice_date + timedelta(days=int(days_due))
 
-            dateresult = date_ve - invoice_date
-            dateresultdays = dateresult.days
+#             dateresult = date_ve - invoice_date
+#             dateresultdays = dateresult.days
 
-            if dateresultdays < 0:
-                dateresultdays = dateresultdays*-1
-            else:
-                dateresultdays = 0
+            dateresult = datetime.now().date() - invoice_date_due
+            dateresultdays = dateresult.days * -1
+            
+            # if dateresultdays < 0:
+            #     dateresultdays = dateresultdays*-1
+            # else:
+            #     dateresultdays = 0
+            
+            
             return dateresultdays
         else :
             return 0

@@ -190,7 +190,6 @@ class RetentionReportXls(models.AbstractModel):
             
             
             dateresult = datetime.now().date() - res.invoice_date_due
-            # dateresult = date_ve - res.invoice_date
             dateresultdays = dateresult.days * -1
             
             # if dateresultdays < 0:

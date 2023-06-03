@@ -101,7 +101,7 @@
                                     <td t-if = "line.state == 'posted'"> Publicado </td>
                                     <td t-if = "line.state == 'cancel'">  Cancelada</td>
                                     
-                                    <td> <span t-esc="o.get_dateresultdays(line.invoice_payment_term_id,line.invoice_date)" /> </td>
+                                    <td> <span t-esc="o.get_dateresultdays(line.invoice_payment_term_id,line.invoice_date_due)" /> </td>
                                     
                                 </tr>
                                 <t t-if = "line.currency_id.name == 'CRC'">
