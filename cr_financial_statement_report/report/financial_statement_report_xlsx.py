@@ -141,6 +141,13 @@ class RetentionReportXls(models.AbstractModel):
                 ('move_type','in', ['out_invoice'] ),
                 ('state','in', ['posted'] ),
             ])
+
+            lines_filtered = []
+            for l in lines_account:
+                if l.amount_total  - l.amount_residual > 0:
+                    lines_filtered.append(l.id)
+            
+            # lines_account = self.env['account.move'].browse(lines_filtered)
         
         else:
             lines_account = self.env['account.move'].search([
@@ -150,6 +157,13 @@ class RetentionReportXls(models.AbstractModel):
                 ('invoice_date','>=', data['start_date'] ),
                 ('invoice_date','<=', data['end_date'] ),
             ])
+
+            lines_filtered = []
+            for l in lines_account:
+                if l.amount_total  - l.amount_residual > 0:
+                    lines_filtered.append(l.id)
+            
+            lines_account = self.env['account.move'].browse(lines_filtered)
         
         total_colones = 0
         total_dolares = 0
@@ -169,18 +183,7 @@ class RetentionReportXls(models.AbstractModel):
             sheet.write(row,6, res.amount_total  - res.amount_residual  ,format43)
             sheet.write(row,7, res.amount_residual  ,format43)
             dev  =  res.amount_total - res.amount_residual 
-            state = 'Sin definir'
-            if res.state == 'draft':
-                state = 'Borrador'
             
-            elif res.state == 'posted':
-                state = 'Publicado'
-                
-            elif res.state == 'cancel':
-                state = 'Cancelada'
-            	
-            # invoice_date_due
-            sheet.write(row,8, state ,format43)
             
             if res and res.invoice_payment_term_id and res.invoice_payment_term_id.line_ids:
                 days_due = res.invoice_payment_term_id.line_ids[0].days
@@ -198,6 +201,18 @@ class RetentionReportXls(models.AbstractModel):
             #     dateresultdays = 0
             
             # raise ValidationError('esta es la data=========>%s' %dateresultdays)
+
+            state = 'Sin definir'
+            if dateresultdays < 0:
+                state = 'No vencida'
+            
+            elif dateresultdays > 0:
+                state = 'Vencida'
+           
+            	
+            # invoice_date_due
+            sheet.write(row,8, state ,format43)
+            
             sheet.write(row,9,dateresultdays,format43)
             
             if res.currency_id.name == 'USD':

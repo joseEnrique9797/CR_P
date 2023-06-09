@@ -3,7 +3,7 @@
 from odoo import models, fields, api
 from datetime import timedelta
 from datetime import datetime
-
+# from datetime import timedelta
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
@@ -33,7 +33,9 @@ class ResPartner(models.Model):
             'context': "{'partner_id':%s}" % record.id,
             'target': 'new',
         }
-    
+
+    # def date_end_date()
+    #     return 
     
     def get_dateresultdays(self, invoice_payment_term_id, invoice_date_due):
         if invoice_date_due:
@@ -137,6 +139,14 @@ class ResPartner(models.Model):
             limite_tarifa_credito = self.limit_credit
         
         return limite_tarifa_credito
+
+    def date_end_date(self, line):
+
+        if line.invoice_payment_term_id and line.invoice_payment_term_id.line_ids:
+            return line.invoice_date_due + timedelta(days=line.invoice_payment_term_id.line_ids[0].days)
+        else :
+            return line.invoice_date_due
+
     
     def get_accounts_partner(self):
         if self.start_date and self.end_date:
@@ -147,9 +157,19 @@ class ResPartner(models.Model):
                 ('move_type','in', ['out_invoice'] ),
                 ('state','in', ['posted'] ),
             ])
+
+            lines_filtered = []
+            for l in lines_account:
+                if l.amount_total  - l.amount_residual > 0:
+                    lines_filtered.append(l.id)
+
+            
+            lines_account = self.env['account.move'].browse(lines_filtered)
+
             
             self.start_date = False
             self.end_date = False
+
             
             return lines_account
         else:
@@ -158,8 +178,17 @@ class ResPartner(models.Model):
                 ('move_type','in', ['out_invoice'] ),
                 ('state','in', ['posted'] ),
             ])
+            lines_filtered = []
+            for l in lines_account:
+                if l.amount_total  - l.amount_residual > 0:
+                    lines_filtered.append(l.id)
+
+            
+            # lines_account = self.env['account.move'].browse(lines_filtered)
             
             return lines_account
+
+        
             
             
     
