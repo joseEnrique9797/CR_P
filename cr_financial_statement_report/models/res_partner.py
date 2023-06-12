@@ -37,28 +37,22 @@ class ResPartner(models.Model):
     # def date_end_date()
     #     return 
     
-    def get_dateresultdays(self, invoice_payment_term_id, invoice_date_due):
-        if invoice_date_due:
+    def get_dateresultdays(self, invoice_payment_term_id, invoice_date_due, invoice_date):
+        if invoice_payment_term_id:
             
-#             days_due = invoice_payment_term_id.line_ids[0].days
-#             date_ve = invoice_date + timedelta(days=int(days_due))
-
-#             dateresult = date_ve - invoice_date
-#             dateresultdays = dateresult.days
-
+            invoice_date_due =  invoice_date + timedelta(days=invoice_payment_term_id.line_ids[0].days)
             dateresult = datetime.now().date() - invoice_date_due
-            dateresultdays = dateresult.days * -1
-            
-            # if dateresultdays < 0:
-            #     dateresultdays = dateresultdays*-1
-            # else:
-            #     dateresultdays = 0
-            
-            
+            dateresultdays = dateresult.days 
             return dateresultdays
         else :
-            return 0
-
+            if invoice_date_due:
+                dateresult = datetime.now().date() - invoice_date_due
+                dateresultdays = dateresult.days 
+                
+                
+                return dateresultdays
+            else :
+                return 0
     
     def get_restante(self, all):
         lines_account = self.get_accounts_partner()
@@ -143,7 +137,7 @@ class ResPartner(models.Model):
     def date_end_date(self, line):
 
         if line.invoice_payment_term_id and line.invoice_payment_term_id.line_ids:
-            return line.invoice_date_due + timedelta(days=line.invoice_payment_term_id.line_ids[0].days)
+            return line.invoice_date + timedelta(days=line.invoice_payment_term_id.line_ids[0].days)
         else :
             return line.invoice_date_due
 
