@@ -147,7 +147,7 @@ class RetentionReportXls(models.AbstractModel):
                 if l.amount_total  - l.amount_residual > 0:
                     lines_filtered.append(l.id)
             
-            # lines_account = self.env['account.move'].browse(lines_filtered)
+            lines_account = self.env['account.move'].browse(lines_filtered)
         
         else:
             lines_account = self.env['account.move'].search([
@@ -175,8 +175,22 @@ class RetentionReportXls(models.AbstractModel):
         total_devoluciones_dolares = 0
         for res in lines_account:
             sheet.write(row,0,str(res.invoice_date),format43)
-            sheet.write(row,1,'30',format43)
-            sheet.write(row,2, str(res.invoice_date_due),format43)
+            if res.invoice_payment_term_id and res.invoice_payment_term_id.line_ids and res.invoice_payment_term_id.line_ids[0].days :
+                sheet.write(row,1,res.invoice_payment_term_id.line_ids[0].days,format43)
+            else :
+                sheet.write(row,1,'',format43)
+
+
+        
+            if res and res.invoice_payment_term_id and res.invoice_payment_term_id.line_ids:
+                date_ve = res.invoice_date + timedelta(days=res.invoice_payment_term_id.line_ids[0].days)
+            else:
+                date_ve = res.invoice_date_due
+            
+            
+            # date_ve = res.invoice_date + timedelta(days=int(days_due))
+    
+            sheet.write(row,2, str(date_ve),format43)
             sheet.write(row,3,res.name,format43)
             sheet.write(row,4,res.currency_id.name,format43)
             sheet.write(row,5,res.amount_total,format43)
@@ -185,23 +199,28 @@ class RetentionReportXls(models.AbstractModel):
             dev  =  res.amount_total - res.amount_residual 
             
             
-            if res and res.invoice_payment_term_id and res.invoice_payment_term_id.line_ids:
-                days_due = res.invoice_payment_term_id.line_ids[0].days
-            else:
-                days_due = 0
-            date_ve = res.invoice_date + timedelta(days=int(days_due))
+            
+            dateresultdays = 0
+            
+            # dateresult = datetime.now().date() - res.invoice_date_due
+            # dateresultdays = dateresult.days * -1
+            
+            if res.invoice_payment_term_id:
+            
+                invoice_date_due =  res.invoice_date + timedelta(days=res.invoice_payment_term_id.line_ids[0].days)
+                dateresult = datetime.now().date() - invoice_date_due
+                dateresultdays = dateresult.days 
+                # return dateresultdays
+            else :
+                if res.invoice_date_due:
+                    dateresult = datetime.now().date() - res.invoice_date_due
+                    dateresultdays = dateresult.days 
+                
             
             
-            dateresult = datetime.now().date() - res.invoice_date_due
-            dateresultdays = dateresult.days * -1
             
-            # if dateresultdays < 0:
-            #     dateresultdays = dateresultdays*-1
-            # else:
-            #     dateresultdays = 0
             
-            # raise ValidationError('esta es la data=========>%s' %dateresultdays)
-
+            
             state = 'Sin definir'
             if dateresultdays < 0:
                 state = 'No vencida'

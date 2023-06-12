@@ -47,7 +47,7 @@ class ResPartner(models.Model):
         else :
             if invoice_date_due:
                 dateresult = datetime.now().date() - invoice_date_due
-                dateresultdays = dateresult.days 
+                dateresultdays = dateresult.days * -1
                 
                 
                 return dateresultdays
@@ -178,7 +178,7 @@ class ResPartner(models.Model):
                     lines_filtered.append(l.id)
 
             
-            # lines_account = self.env['account.move'].browse(lines_filtered)
+            lines_account = self.env['account.move'].browse(lines_filtered)
             
             return lines_account
 
