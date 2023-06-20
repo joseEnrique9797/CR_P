@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="sheet_consolidation_seq" model="ir.sequence">
+            <field name="name">Secuancia consolidaciones</field>
+            <field name="code">sheet.consolidation</field>
+            <field name="prefix">/</field>
+            <field name="number_increment">1</field>
+            <field name="padding">6</field>
+            <field name="number_next_actual">1</field>
+            <field name="use_date_range">False</field>
+            <field name="active">True</field>
+        </record>
+    </data>
+</odoo>

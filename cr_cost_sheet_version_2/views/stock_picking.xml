@@ -1,0 +1,64 @@
+<odoo>
+  <data>
+    <!-- account.move inherit form view -->
+    <record id="stock_view_picking_form" model="ir.ui.view">
+        <field name="name">stock.view.picking.form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_confirm']" position="after">
+                <button name="action_confirm_quantity_inventary" string="Recepción completa" type="object" class="oe_highlight"/>
+            </xpath>
+            
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="cost_id" />
+            </xpath>
+            
+            <xpath expr="//field[@name='move_line_ids_without_package']" position="replace">
+                <field name="move_line_ids_without_package" options="{'no_create': True}" context="{'tree_view_ref': 'stock.view_stock_move_line_detailed_operation_tree', 'default_picking_id': id, 'default_location_id': location_id, 'default_location_dest_id': location_dest_id, 'default_company_id': company_id}">
+                
+                    <tree editable="bottom">
+                        <field name="product_id" readonly ="1" />
+                        <field name="location_id" readonly ="1" />
+                        <field name="product_uom_qty" readonly ="1" />
+                        <field name="qty_done" readonly ="1" />
+                        <field name="qty_received" />
+                        <field name="product_uom_id" readonly ="1" />
+                    </tree>
+                    
+                    
+                </field>
+            </xpath>
+            
+            
+            
+            <xpath expr="//field[@name='receives_name']" position="after">
+                <field name="user_desp_id" readonly = "1" />
+                <field name="date_desp" readonly = "1" />
+            </xpath>
+            
+            <xpath expr="//field[@name='move_ids_without_package']//tree[1]//field[@name='product_uom']" position="before">
+                <field name="qty_received" />
+            </xpath>
+            
+<!--             <xpath expr="//field[@name='move_ids_without_package']//tree[1]//field[@name='quantity_done']" position="after">
+                <field name="cost_id" />
+            </xpath> -->
+            
+            
+        </field>
+    </record>
+      
+      
+      <record id="view_stock_move_line_detailed_operation_tree" model="ir.ui.view">
+        <field name="name">view.stock.move.line.detailed.operation.tree</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.view_stock_move_line_detailed_operation_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='qty_done']" position="after">
+                <field name="qty_received" />
+            </xpath>
+        </field>
+    </record>
+  </data>
+</odoo>

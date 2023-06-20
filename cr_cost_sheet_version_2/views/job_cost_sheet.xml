@@ -1,0 +1,424 @@
+<odoo>
+  <data>
+    
+    <record id="make_invisible" model="res.groups">
+            <field name="name">Invisible</field>
+    </record>
+      
+    <record id="bi_odoo_job_costing_management.sub_menu_projects" model="ir.ui.menu">
+            <field name="groups_id" eval="[(4,ref('cr_cost_sheet_version_2.make_invisible'))]"/>
+    </record>
+      
+    <record id="bi_odoo_job_costing_management.sub_menu_job_orders" model="ir.ui.menu">
+            <field name="groups_id" eval="[(4,ref('cr_cost_sheet_version_2.make_invisible'))]"/>
+    </record>
+      
+    <record id="bi_odoo_job_costing_management.sub_menu_materials_boq" model="ir.ui.menu">
+            <field name="groups_id" eval="[(4,ref('cr_cost_sheet_version_2.make_invisible'))]"/>
+    </record>
+      
+      <record id="bi_odoo_job_costing_management.sub_menu_configuration" model="ir.ui.menu">
+            <field name="groups_id" eval="[(4,ref('cr_cost_sheet_version_2.make_invisible'))]"/>
+    </record>
+      
+      
+      
+      
+
+      
+      <!-- account.move inherit form view -->
+    <record id="job_cost_sheet_tree_view" model="ir.ui.view">
+        <field name="name">job.cost.sheet.tree.view</field>
+        <field name="model">job.cost.sheet</field>
+        <field name="inherit_id" ref="bi_odoo_job_costing_management.job_cost_sheet_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="sequence" string = "número de requisición" />
+                <field name="impreso"  />
+<!--                 <field name="create_date_"  /> -->
+            </xpath>
+            
+            <xpath expr="//field[@name='job_order_id']" position="attributes">
+                <attribute name = "invisible">1</attribute>
+            </xpath>
+            
+            <xpath expr="//field[@name='create_date']" position="attributes">
+                <attribute name = "string">Fecha de Creación</attribute>
+            </xpath>
+            
+            <xpath expr="//field[@name='project_id']" position="after">
+                <field name="analytic_account_id" />
+                <field name="create_date_"  />
+            </xpath>
+            
+            <xpath expr="//field[@name='close_date']" position="after">
+                <field name="stage"/>
+            </xpath>
+            
+            
+        </field>
+    </record>
+    
+      <record id="job_cost_sheet_form_view_but" model="ir.ui.view">
+        <field name="name">job.cost.sheet.form.view.but</field>
+        <field name="model">job.cost.sheet</field>
+        <field name="inherit_id" ref="bi_material_requisition_cost_sheet.job_cost_sheet_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='%(bi_material_requisition_cost_sheet.action_create_purchase_req_wizard)d']" position="attributes">
+                <attribute name = "invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+      
+    <record id="view_move_form" model="ir.ui.view">
+        <field name="name">job.cost.sheet.form.view</field>
+        <field name="model">job.cost.sheet</field>
+        <field name="inherit_id" ref="bi_odoo_job_costing_management.job_cost_sheet_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="replace">
+                <field name="name" attrs="{'readonly': [('stage', 'not in',['draft'])]}"/>
+                
+            </xpath>
+            
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" name="inventory_get" type="object" icon="fa-inventory">
+                    <field name="inventory_count" widget="statinfo" string="Despachos"/>
+                </button>
+            </xpath>
+            
+            
+            
+            <xpath expr="//field[@name='stage']" position="replace">
+                <field name="stage" widget="statusbar" statusbar_visible="draft,confirm,cancel"/>
+            </xpath>
+            
+            <xpath expr="//button[@name='action_approve']" position="attributes">
+                <attribute name = "invisible">1</attribute>
+            </xpath>
+            
+            <xpath expr="//button[@name='action_done']" position="attributes">
+                <attribute name = "invisible">1</attribute>
+            </xpath>
+            
+            <xpath expr="//field[@name='analytic_ids']" position="replace">
+                <field name="analytic_ids" invisible = "1" attrs="{'readonly': [('stage', 'not in',['draft'])]}"/>
+            </xpath>
+            
+            <xpath expr="//field[@name='job_cost_description']" position="replace">
+                <field name="job_cost_description" attrs="{'readonly': [('stage', 'not in',['draft'])]}"/>
+            </xpath>
+            
+            
+            <xpath expr="//field[@name='job_order_id']" position="attributes">
+                <attribute name = "invisible">1</attribute>
+            </xpath>
+            
+<!--             buttom ============================-->
+            <xpath expr="//button[@name='action_confirm']" position="attributes">
+                <attribute name = "attrs">{'invisible': [('stage', 'not in',['draft'])]}</attribute>
+            </xpath>
+<!--             <xpath expr="//button[@name='job_order_id']" position="attributes">
+                <attribute name = "invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='job_order_id']" position="attributes">
+                <attribute name = "invisible">1</attribute>
+            </xpath>
+             -->
+            
+<!--             buttom ============================-->
+            
+            <xpath expr="//field[@name='sale_reference']" position="attributes">
+                <attribute name = "invisible">1</attribute>
+            </xpath>
+            
+            <xpath expr="//field[@name='total_material_cost']" position="attributes">
+                <attribute name = "invisible">1</attribute>
+            </xpath>
+            
+            <xpath expr="//field[@name='total_labour_cost']" position="attributes">
+                <attribute name = "invisible">1</attribute>
+            </xpath>
+            
+            <xpath expr="//field[@name='total_overhead_cost']" position="attributes">
+                <attribute name = "invisible">1</attribute>
+            </xpath>
+            
+            <xpath expr="//field[@name='total_cost']" position="attributes">
+                <attribute name = "invisible">1</attribute>
+            </xpath>
+            
+            <xpath expr="//field[@name='project_id']" position="attributes">
+                <attribute name = "invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='job_issue_customer_id']" position="attributes">
+                <attribute name = "invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='sale_reference']" position="attributes">
+                <attribute name = "invisible">1</attribute>
+            </xpath>
+            
+            
+            <xpath expr="//field[@name='create_date']" position="attributes">
+                <attribute name = "string">Fecha Requerido</attribute>
+                <attribute name = "invisible">1</attribute>
+            </xpath>
+            
+            <xpath expr="//field[@name='close_date']" position="attributes">
+                <attribute name = "invisible">1</attribute>
+            </xpath>
+            
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="pending" invisible = "1" />
+                <field name="analytic_account_id" />
+                <field name="desp_exp" />
+                <field name="impreso"  />
+                <field name="consolidation_id"  readonly = "1"/>
+                <field name="desp_exp_date" attrs ="{'invisible': [('desp_exp', '=',False)], 'required': [('desp_exp', '=',True)]}"  />
+            </xpath>
+            
+            <xpath expr="//field[@name='create_by_id']" position="attributes">
+                <attribute name = "invisible">0</attribute>
+                <attribute name = "readonly">1</attribute>
+                <attribute name = "string">Creado Por</attribute>
+            </xpath>
+            
+            <xpath expr="//field[@name='create_date']" position="after">
+                <field name="create_date_" force_save = "1" attrs="{'readonly': [('stage', '!=','draft')]}" />
+                <field name="date_requested" readonly = "1"/>
+                <field name="date_confirm" readonly = "1"/>
+                <field name="date_ending" readonly = "1"/>
+                <field name="date_cancel" readonly = "1"/>
+                <field name="compute_all_product" invisible = "1" readonly = "1"/>
+                <field name="reason" readonly = "1" attrs="{'invisible': [('reason', '=',False)]}" />
+                <field name="user_cancel_id" readonly = "1" attrs="{'invisible': [('user_cancel_id', '=',False)]}" />
+            </xpath>
+            
+            <xpath expr="//page[1]//field[@name='material_job_cost_line_ids']" position="replace">
+                <field name="material_job_cost_line_ids" widget="one2many_list" context="{'default_job_type':'material'}" attrs="{'readonly': [('stage', 'in',['confirm','approve','done'])]}">
+                    <tree string="Material" editable="bottom">
+                        <field name="date" invisible="1"/>
+                        <field name="job_type_id" invisible="1" domain="[('job_type', '=', 'material')]" options="{'no_create': True}"/>
+                        <field name="product_id"/>
+                        <field name="description" invisible="1"/>
+                        <field name="reference" invisible="1"/>
+                        <field name="quantity" string = "Cantidad solicitada" sum="quantity"/>
+                        
+                        <field name="qty_desp"  sum="quantity"/>
+                        <field name="qty_pending"  sum="quantity"/>
+                        
+                        <field name="uom_id" invisible="1"/>
+                        <field name="invoiced_qty" invisible="1" readonly="1"/>
+                        <field name="unit_price" invisible="1" />
+                        <field name="actual_purchase_qty" invisible="1" sum="actual_purchase_qty"/>
+                        <field name="actual_invoice_qty" invisible="1" sum="actual_invoice_qty"/>
+                        <field name="subtotal" widget="monetary" invisible="1"  sum="subtotal"/>
+                        <field name="currency_id"  invisible="1"/>
+                        <field name="job_type" invisible="1"/>
+                    </tree>
+                </field>
+            </xpath>
+            
+            
+            <xpath expr="//page[2]" position="attributes">
+                <attribute name = "invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[3]" position="attributes">
+                <attribute name = "invisible">1</attribute>
+            </xpath>
+            
+            <xpath expr="//button[@name='action_confirm']" position="after">
+                <button name="action_confirm_cancel" string="Cancelar" type="object" class="oe_highlight" attrs="{'invisible': [('stage', 'not in',['confirm'])]}"/>
+                <button name="action_confirm_desp" string="Despachar" type="object" class="oe_highlight" attrs="{'invisible': [('stage', 'not in',['confirm'])]}"/>
+                <button name="action_confirm_close" string="Cerrar" type="object" class="oe_highlight" attrs="{'invisible': [('stage', 'not in',['confirm'])]}"/>
+            </xpath>
+        </field>
+    </record>
+      
+    <record id="job_cost_sheet_wizard_cancel_from" model="ir.ui.view">
+      <field name="name">job.cost.sheet.wizard.cancel.from</field>
+      <field name="model">job.cost.sheet.wizard.cancel</field>
+      <field name="arch" type="xml">
+         
+        <form >
+          <sheet>
+           
+            <group>
+                <field name="reason" />
+            </group>
+          </sheet>
+          <footer>
+              <button string="Confirmar cancelacion" name="action_confirm" type="object" class="btn-primary"/>
+              <button string="Cancelar" class="btn-secondary" special="cancel"/>
+          </footer>
+        </form>
+      </field>
+    </record>
+      
+      
+    <record id="create_despachos_wizard_from" model="ir.ui.view">
+      <field name="name">create.despachos.wizard.from</field>
+      <field name="model">create.despachos</field>
+      <field name="arch" type="xml">
+        <form >
+          <sheet>
+            <group>
+                <field name="cost_ids"  invisible = "1" />
+                <field name="product_id" readonly = "1" />
+                <field name="product_desp_max" invisible = "1" />
+                <field name="product_desp" />
+                <field name="cost_id"  domain="[('id', 'in', cost_ids)]" />
+            </group>
+          </sheet>
+          <footer>
+              <button string="Confirmar" name="action_confirm" type="object" class="btn-primary"/>
+              <button string="Cancelar" class="btn-secondary" special="cancel"/>
+          </footer>
+        </form>
+      </field>
+    </record>
+      
+    <record id="job_cost_sheet_search" model="ir.ui.view">
+        <field name="name">job.cost.sheet.search</field>
+        <field name="model">job.cost.sheet</field>
+        <field name="arch" type="xml">
+            <search string="Search Chart of Account Templates">
+                <field name="compute_all_product" string="Contiene producto"/>
+                <field name="sequence" />
+                
+                <group expand="0" string="Group By">
+                    <filter string="Estado" name="state" domain="[]" context="{'group_by':'stage'}"/>
+                    
+                </group>
+            </search>
+        </field>
+    </record>
+      
+<!--       <record id="consolidate_cost" model="ir.actions.act_window">
+            <field name="name">Consolidar costos</field>
+            <field name="res_model">consolidate.cost</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="binding_model_id" ref="cr_cost_sheet_version_2.model_job_cost_sheet"/>
+            <field name="binding_view_types">list,form</field>
+        </record> -->
+      
+        <record id="action_consolidate_cost" model="ir.actions.act_window">
+            <field name="name">Crear consolidacion</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">consolidate.cost</field>
+            <field name="target">new</field>
+            <field name="view_mode">form</field>
+        </record>
+      
+          <record id="action_consolidate_requisition_all" model="ir.actions.act_window">
+            <field name="name">Consolidación de requisiciónes</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">job.cost.sheet.consolidation</field>
+            <field name="target">current</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+      
+      <menuitem id="consolidate_cost_menu"
+                  name="Crear consolidación"
+                  sequence="20"
+                action = "action_consolidate_cost"
+                  parent="bi_odoo_job_costing_management.sub_menu_job_costing"/>
+      
+      <menuitem id="consolidate_requisition_menu"
+                  name="Consolidación de requisiciónes"
+                  sequence="10"
+                  action = "action_consolidate_requisition_all"
+                  parent="bi_odoo_job_costing_management.sub_menu_job_costing"/>
+      
+          <record id="parameters_other_wizard_form" model="ir.ui.view">
+      <field name="name">parameters.other.wizard.form</field>
+      <field name="model">consolidate.cost</field>
+      <field name="arch" type="xml">
+         
+        <form >
+          <sheet>
+           
+              <group>
+                    <field name="date_init" />
+                    <field name="date_end" />
+              </group>
+          </sheet>
+          <footer>
+              <button string="Generar consolidacion" name="confirm_consolidate" type="object" class="btn-primary"/>
+              <button string="Cancelar" class="btn-secondary" special="cancel"/>
+          </footer>
+        </form>
+      </field>
+    </record>
+      
+      
+      
+<!--       job.cost.sheet.consolidation -->
+      
+      <record id="view_cna_actions_lines_list" model="ir.ui.view">
+            <field name="name">Consolidación de requisiciónes</field>
+            <field name="model">job.cost.sheet.consolidation</field>
+            <field eval="6" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Consolidación de requisiciónes" >
+                    <field name="name" /> 
+                    <field name="create_date" readonly = "1" />
+                    <field name="date_init" readonly = "1" />
+                    <field name="date_end" readonly = "1" />
+                    <field name="state" readonly="1"/> 
+                </tree>
+            </field>
+        </record>
+      
+      <record id="job_cost_sheet_consolidation_form" model="ir.ui.view">
+            <field name="name">job.cost.sheet.consolidation.form</field>
+            <field name="model">job.cost.sheet.consolidation</field>
+            <field name="arch" type="xml">
+                <form string="Follow-up Steps">
+                    <header>
+                        <field name="state" widget="statusbar" readonly ="1"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" name="cost_list_get" type="object" icon="fa-inventory">
+                                <field name="cost_count" widget="statinfo" string="Requisiciones"/>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name" attrs="{'invisible': [('name', '=', False)]}" readonly = "1" />
+                                <field name="create_date" string = "Fecha de Creación" readonly = "1" />
+                                <field name="create_by_id" readonly = "1" />
+                            </group>
+                            <group>
+                                
+                                <field name="cost_sheet_ids" invisible = "0" force_save = "1" />
+                                <field name="block_dates" invisible = "1" />
+                                <field name="date_init" force_save="1" attrs="{'readonly': [('block_dates', '=', True)]}" />
+                                <field name="date_end" force_save="1" attrs="{'readonly': [('block_dates', '=', True)]}" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Consolidaciones">
+                                <field name="consolidation_line_ids" readonly= "1" >
+                                    <tree editable="bottom">
+                                        <field name="consolidation_int" force_save = "1" invisible = "1" />
+                                        <field name="consolidation_id" force_save = "1" invisible = "1" />
+                                        <field name="product_id" />
+                                        <field name="description" invisible = "1" />
+                                        <field name="qty_required" />
+                                        <field name="qty_send" />
+                                        <field name="qty_wait" />
+                                        <field name="qty_head" />
+                                        <button name="get_despachos" string="Despachar" type="object" />
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+      
+  </data>
+</odoo>

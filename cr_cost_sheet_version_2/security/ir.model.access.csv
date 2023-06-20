@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+acces_job_cost_sheet_wizard_cancel,job_cost_sheet_wizard_cancel,model_job_cost_sheet_wizard_cancel,,1,1,1,1
+acces_consolidate_cost,consolidate_cost,model_consolidate_cost,,1,1,1,1
+acces_job_cost_sheet_consolidation,job_cost_sheet_consolidation,model_job_cost_sheet_consolidation,,1,1,1,1
+acces_job_cost_sheet_consolidation_line,job_cost_sheet_consolidation_line,model_job_cost_sheet_consolidation_line,,1,1,1,1
+
+acces_create_despachos,create_despachos,model_create_despachos,,1,1,1,1
+
+
