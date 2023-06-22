@@ -33,7 +33,7 @@
 								<field name="payment_method_id" options="{'no_create': True, 'no_open': True}" domain="[('payment_type', '=', parent.payment_type)]"/>
 								<field name="amount" sum="amount"/>
 								<field name="communication"/>
-								<field name="invoice_id" invisible="1"/>
+								<field name="invoice_id" invisible="0"/>
 								<field name="currency_id" invisible="1"/>
 							</tree>
 						</field>

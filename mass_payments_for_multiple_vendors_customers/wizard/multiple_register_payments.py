@@ -3,7 +3,8 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
-
+import logging
+_logger = logging.getLogger(__name__)
 
 MAP_INVOICE_TYPE_PARTNER_TYPE = {
     'out_invoice': 'customer',
@@ -154,7 +155,7 @@ class MultipleRegisterPayment(models.TransientModel):
                         'partner_id': ResPartner.browse(partner_id).id,
                         'partner_type': self.partner_type,
                         'ref': communication,
-                        'destination_account_id': self.line_ids[0].account_id.id
+                        'destination_account_id': self.line_ids.filtered(lambda r: (r.partner_id.id == partner_id))[0].account_id.id
                     }
                     Created_Payment = AccountPayment.create(payment_vals)
                     Created_Payment.ref = self.memo_ref
@@ -165,6 +166,7 @@ class MultipleRegisterPayment(models.TransientModel):
                         credit_lines = payment_rec.line_ids.filtered('credit')
                         debit_lines = payment_rec.line_ids.filtered('debit')
                     for line in payment_line_objs:
+                        
                         if line.invoice_id.move_type in ['out_invoice', 'out_refund', 'out_receipt']:
                             line.invoice_id.with_context({'amount_residual_currency':line.amount,'amount_residual':line.amount}).js_assign_outstanding_line(credit_lines.id)
                         elif line.invoice_id.move_type in ['in_invoice', 'in_refund', 'in_receipt']:
@@ -213,9 +215,14 @@ class AccountMove(models.Model):
         invoice.
         :param line_id: The id of the line to reconcile with the current invoice.
         '''
+        
         self.ensure_one()
         lines = self.env['account.move.line'].browse(line_id)
+        # lines += self.line_ids
         lines += self.line_ids.filtered(lambda line: line.account_id == lines[0].account_id and not line.reconciled)
+        for l_test in self.line_ids:
+            
+            _logger.warning('pagar factura ======> %s %s' %(lines[0].account_id.name, l_test.account_id.name))
         for line in lines:
             if self._context.get('amount_residual_currency') and self._context.get('amount_residual'):
                 amount_residual_currency = self._context.get('amount_residual_currency')
