@@ -36,21 +36,21 @@
                                 <td style = "background-color:#D9E1F2">CLIENTE</td>
                                 <td> <span t-esc="o.name" /> </td>
                                 <td style = "background-color:#D9E1F2">LIMITE CRÉDITO</td>
-                                <td>  <span t-esc="'{:,.2f}'.format(o.get_limite_tarifa_credito())"  /> </td>
+                                <td style = "text-align:right">  <span t-esc="'{:,.2f}'.format(o.get_limite_tarifa_credito())"  /> </td>
                             </tr>
                             
                             <tr>
                                 <td style = "background-color:#D9E1F2">CONTRIBUYENTE</td>
                                 <td> <span t-esc="o.vat" /> </td>
                                 <td style = "background-color:#D9E1F2">TOTAL CRÉDITO</td>
-                                <td> <span t-esc="'{:,.2f}'.format(o.get_total_mont_convert())"  />  </td>
+                                <td style = "text-align:right"> <span t-esc="'{:,.2f}'.format(o.get_total_mont_convert())"  />  </td>
                             </tr>
                             
                             <tr>
                                 <td style = "background-color:#D9E1F2">DIRECCIÓN</td>
                                 <td> <span t-esc="o.contact_address_complete" />  </td>
                                 <td style = "background-color:#D9E1F2">DISPONIBLE</td>
-                                <td> <span t-esc="'{:,.2f}'.format( o.get_restante(o.get_limite_tarifa_credito()) )" /></td>
+                                <td style = "text-align:right"> <span t-esc="'{:,.2f}'.format( o.get_restante(o.get_limite_tarifa_credito()) )" /></td>
                             </tr>
                             
                             <tr>
@@ -95,16 +95,16 @@
                                     <td> <span t-esc="o.date_end_date(line)" /> </td>
                                     <td> <span t-esc="line.name" /> </td>
                                     <td> <span t-esc="line.currency_id.name" /> </td>
-                                    <td> <span  t-esc="'{:,}'.format(line.amount_total)"  /> </td>
-                                    <td> <span  t-esc="'{:,}'.format(line.amount_total  - line.amount_residual)"  /></td>
-                                    <td> <span  t-esc="'{:,}'.format(line.amount_residual)"  /></td>
+                                    <td style = "text-align:right"> <span  t-esc="'{:,}'.format(line.amount_total)"  /> </td>
+                                    <td style = "text-align:right"> <span  t-esc="'{:,}'.format(line.amount_total  - line.amount_residual)"  /></td>
+                                    <td style = "text-align:right"> <span  t-esc="'{:,}'.format(line.amount_residual)"  /></td>
 
                                     <td t-if = "o.get_dateresultdays(line.invoice_payment_term_id,line.invoice_date_due, line.invoice_date) > 0"> Vencida </td>
                                     <td t-else = "">No vencida</td>
                                     <!-- <td t-if = "line.state == 'posted'"> Publicado </td>
                                     <td t-if = "line.state == 'cancel'">  Cancelada</td> -->
                                     
-                                    <td> <span t-esc="o.get_dateresultdays(line.invoice_payment_term_id,line.invoice_date_due, line.invoice_date)" /> </td>
+                                    <td style = "text-align:right"> <span t-esc="o.get_dateresultdays(line.invoice_payment_term_id,line.invoice_date_due, line.invoice_date)" /> </td>
                                     
                                 </tr>
                                 <t t-if = "line.currency_id.name == 'CRC'">
@@ -130,9 +130,9 @@
                                 <td>  </td>
                                 <td>  </td>
                                 <td>  CRC </td>
-                                <td> <span t-esc="'{:,.2f}'.format(c_sum_amount_total)" /> </td>
-                                <td> <span t-esc="'{:,.2f}'.format(c_rest_amount_total_amount_residual)" /> </td>
-                                <td> <span t-esc="'{:,.2f}'.format(c_sum_amount_residual)" /> </td>
+                                <td style = "text-align:right"> <span t-esc="'{:,.2f}'.format(c_sum_amount_total)" /> </td>
+                                <td style = "text-align:right"> <span t-esc="'{:,.2f}'.format(c_rest_amount_total_amount_residual)" /> </td>
+                                <td style = "text-align:right"> <span t-esc="'{:,.2f}'.format(c_sum_amount_residual)" /> </td>
 
                                 <td></td>
                                 
@@ -145,9 +145,9 @@
                                 <td>  </td>
                                 <td>  </td>
                                 <td>  USD </td>
-                                <td> <span t-esc="'{:,.2f}'.format(u_sum_amount_total)" /> </td>
-                                <td> <span t-esc="'{:,.2f}'.format(u_rest_amount_total_amount_residual)" /> </td>
-                                <td> <span t-esc="'{:,.2f}'.format(u_sum_amount_residual)" /> </td>
+                                <td style = "text-align:right"> <span t-esc="'{:,.2f}'.format(u_sum_amount_total)" /> </td>
+                                <td style = "text-align:right"> <span t-esc="'{:,.2f}'.format(u_rest_amount_total_amount_residual)" /> </td>
+                                <td style = "text-align:right"> <span t-esc="'{:,.2f}'.format(u_sum_amount_residual)" /> </td>
 
                                 <td></td>
                                 
