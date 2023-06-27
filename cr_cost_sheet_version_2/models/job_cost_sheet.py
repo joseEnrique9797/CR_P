@@ -2,7 +2,8 @@ from odoo import _, api, fields, models, tools
 
 from datetime import datetime
 from odoo.exceptions import UserError, ValidationError
-
+import logging
+_logger = logging.getLogger(__name__)
 class createDespachos(models.Model):
     _name = 'create.despachos'
     
@@ -104,18 +105,30 @@ class jobCostSheetConsolidation(models.Model):
             ])
 
             consolidate = rec.env['job.cost.sheet.consolidation']
-            # raise UserError('=====================>. %s'%(cost))
+            
             product_ids = []
             lines = []
-            for line in cost.material_job_cost_line_ids:
-                if line.product_id.id not in product_ids:
+            for line in cost.material_job_cost_line_ids.filtered(lambda m: m.qty_pending > 0 ):
+                
+                
+                # if line.id != 11087:
+                #     raise UserError('=====================>. %s'%(line.qty_pending))
+                # qty_wait = 0 
+                # for co in cost:
+                #     for line_cost in co.material_job_cost_line_ids:
+                #         if line.product_id.id == line_cost.product_id.id:
+                #             qty_wait +=  line_cost.qty_pending
+                
+                # and qty_wait > 0
+                
+                if line.product_id.id not in product_ids :
                     product_ids.append(line.product_id.id)
                     lines.append((0,0,{
                         'product_id': line.product_id.id,
                         'consolidation_id': rec.id,
                         'consolidation_int': rec.id,
                     }))
-
+            # Aceite corte/rosca rigid (galón)
             rec.write({
                 'cost_sheet_ids': [(6,0, cost.ids)],
                 'consolidation_line_ids': lines,
@@ -214,19 +227,27 @@ class jobCostSheetConsolidationLine(models.Model):
             'target': 'new',
         }
     
-    
+    # @api.depends('')
     def get_values_qty(self):
         for rec in self:
             rec.qty_required = 0
             rec.qty_send = 0
             rec.qty_wait = 0
 #             rec.qty_head = 0
-            for cost in rec.consolidation_id.cost_sheet_ids:
-                for line_cost in cost.material_job_cost_line_ids:
-                    if rec.product_id.id == line_cost.product_id.id:
-                        rec.qty_required +=  line_cost.quantity
-                        rec.qty_send +=  line_cost.qty_desp
-                        rec.qty_wait +=  line_cost.qty_pending
+            # _logger.warning('data ===222============== %s',  line_cost.product_id )
+            consolidation_id = rec.consolidation_id
+            if not consolidation_id:
+                consolidation_id = self.env['job.cost.sheet.consolidation'].browse([rec.consolidation_int])
+            
+            for cost in consolidation_id.cost_sheet_ids:
+                # raise UserError('data=================> %s' %( cost.material_job_cost_line_ids ))
+                for line_cost in cost.material_job_cost_line_ids.filtered(lambda m: m.product_id.id == rec.product_id.id):
+                    
+                    # if rec.product_id.id == line_cost.product_id.id:
+                    rec.qty_required +=  line_cost.quantity
+                    rec.qty_send +=  line_cost.qty_desp
+                    rec.qty_wait +=  line_cost.qty_pending
+            
             
 class jobCostSheet(models.Model):
     _inherit = 'job.cost.sheet'
