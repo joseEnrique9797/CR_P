@@ -411,6 +411,7 @@
                                         <field name="qty_wait" />
                                         <field name="qty_head" />
                                         <button name="get_despachos" string="Despachar" type="object" />
+                                        <button name="get_view_line_detail" string="Visualizar" type="object" />
                                     </tree>
                                 </field>
                             </page>

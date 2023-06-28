@@ -204,6 +204,26 @@ class jobCostSheetConsolidationLine(models.Model):
     qty_head = fields.Float('Cantidad a Mano',  related = 'product_id.qty_available')
 
     # @api.model
+    def get_view_line_detail(self):
+
+        consolidation_id = self.env['job.cost.sheet.consolidation'].browse([self.consolidation_int])
+        
+        ids_array = []
+        for cs in consolidation_id.cost_sheet_ids:
+            lines = cs.material_job_cost_line_ids.filtered(lambda m: m.product_id.id == self.product_id.id)
+            if lines and not  cs.id in ids_array:
+                ids_array.append(cs.id)
+                    
+        return {
+            'name': 'Consolidaciones para -%s' %(self.product_id.name),
+            'view_mode': 'tree,form',
+            'res_model': 'job.cost.sheet',
+            'type': 'ir.actions.act_window',
+            'domain': [('id', 'in',ids_array)],
+            'target': "current",
+        }
+        
+    # @api.model
     def get_despachos(self):
 #         print(op777)
 
