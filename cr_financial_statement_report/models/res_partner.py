@@ -149,7 +149,8 @@ class ResPartner(models.Model):
                 ('invoice_date','>=', self.start_date ),
                 ('invoice_date','<=', self.end_date ),
                 ('move_type','in', ['out_invoice'] ),
-                ('state','in', ['posted'] ),
+                # ('state','in', ['posted'] ),
+                ('payment_state','in', ['in_payment', 'partial', 'not_paid'] ),
             ])
 
             lines_filtered = []
@@ -170,7 +171,7 @@ class ResPartner(models.Model):
             lines_account = self.env['account.move'].search([
                 ('partner_id','=', self.id ),
                 ('move_type','in', ['out_invoice'] ),
-                ('state','in', ['posted'] ),
+                ('payment_state','in', ['in_payment', 'partial', 'not_paid'] ),
             ])
             lines_filtered = []
             for l in lines_account:

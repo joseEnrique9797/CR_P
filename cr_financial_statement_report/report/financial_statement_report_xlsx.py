@@ -6,6 +6,7 @@ from datetime import timedelta
 import io
 import base64
 
+from bs4 import BeautifulSoup
 
 class RetentionReportXls(models.AbstractModel):
     _name = 'report.cr_financial_statement_report.financial_report'
@@ -139,7 +140,7 @@ class RetentionReportXls(models.AbstractModel):
             lines_account = self.env['account.move'].search([
                 ('partner_id','=', partner_id.id ),
                 ('move_type','in', ['out_invoice'] ),
-                ('state','in', ['posted'] ),
+                ('payment_state','in', ['in_payment', 'partial', 'not_paid'] ),
             ])
 
             lines_filtered = []
@@ -152,7 +153,7 @@ class RetentionReportXls(models.AbstractModel):
         else:
             lines_account = self.env['account.move'].search([
                 ('partner_id','=', partner_id.id ),
-                ('state','in', ['posted'] ),
+                ('payment_state','in', ['in_payment', 'partial', 'not_paid'] ),
                 ('move_type','in', ['out_invoice'] ),
                 ('invoice_date','>=', data['start_date'] ),
                 ('invoice_date','<=', data['end_date'] ),
@@ -280,17 +281,20 @@ class RetentionReportXls(models.AbstractModel):
         
         
         row+=5
-        sheet.write(row,0,'BANCO',format33)
-        sheet.write(row,1,'MONEDA',format33)
-        sheet.write(row,2,'IBAN',format33)
-        row+=1
+
+        soup = BeautifulSoup(self.env.company.notifi_account_report)
+        sheet.write(row,1, soup.get_text()  ,format33)
+        # sheet.write(row,0,'BANCO',format33)
+        # sheet.write(row,1,'MONEDA',format33)
+        # sheet.write(row,2,'IBAN',format33)
+        # row+=1
         
         
-        for bank_line in self.env.company.partner_id.bank_ids:
-            sheet.write(row,0,bank_line.bank_id.name,format43)
-            sheet.write(row,1,bank_line.currency_id.name,format43)
-            sheet.write(row,2,bank_line.acc_number,format43)
-            row+=1
+        # for bank_line in self.env.company.partner_id.bank_ids:
+        #     sheet.write(row,0,bank_line.bank_id.name,format43)
+        #     sheet.write(row,1,bank_line.currency_id.name,format43)
+        #     sheet.write(row,2,bank_line.acc_number,format43)
+        #     row+=1
         # self.env.company.partner_id.bank_ids
         
         # sheet.write(row,0,'BAC',format43)

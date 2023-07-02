@@ -65,16 +65,16 @@
                     
                     <table class = "table">
                         <thead>
-                            <th style = "background-color:#D9E1F2">FEHCA EMISIÓN</th>
-                            <th style = "background-color:#D9E1F2">DÍAS CRÉDITO</th>
-                            <th style = "background-color:#D9E1F2">FECHA VENCIMIENTO</th>
-                            <th style = "background-color:#D9E1F2">REFERENCIA</th>
-                            <th style = "background-color:#D9E1F2">MONEDA ORIGEN</th>
-                            <th style = "background-color:#D9E1F2">IMPORTE</th>
-                            <th style = "background-color:#D9E1F2">ABONOS/DEVOLUCIONES</th>
-                            <th style = "background-color:#D9E1F2">SALDO ACTUAL</th>
-                            <th style = "background-color:#D9E1F2">ESTADO</th>
-                            <th style = "background-color:#D9E1F2">DÍAS DE VENCIMIENTO</th>
+                            <th style = "background-color:#D9E1F2; width: 186px !important; ">FECHA EMISIÓN<h6 style = "color:transparent">VENCIMIENTOOO</h6> </th>
+                            <th style = "background-color:#D9E1F2; width: 100px !important">DÍAS CRÉDITO</th>
+                            <th style = "background-color:#D9E1F2; width: 100px !important">FECHA VENCIMIENTO</th>
+                            <th style = "background-color:#D9E1F2; width: 100px !important">REFERENCIA</th>
+                            <th style = "background-color:#D9E1F2; width: 100px !important">MONEDA ORIGEN</th>
+                            <th style = "background-color:#D9E1F2; width: 100px !important">IMPORTE</th>
+                            <th style = "background-color:#D9E1F2; width: 100px !important">ABONOS/DEVOLUCIONES</th>
+                            <th style = "background-color:#D9E1F2; width: 100px !important">SALDO ACTUAL</th>
+                            <th style = "background-color:#D9E1F2; width: 100px !important">ESTADO</th>
+                            <th width= "5px" style = "background-color:#D9E1F2; width: 5px !important">DÍAS VENCIMIENTO</th>
                         </thead>
                         <tbody>
                             <t t-set="u_sum_amount_total" t-value="0"/>
@@ -88,7 +88,7 @@
                                 
                                 
                                 <tr>
-                                    <td><span t-esc="line.invoice_date" /> </td>
+                                    <td style = "width: 186px !important" ><span t-esc="line.invoice_date" /> </td>
                                     <!-- line.invoice_payment_term_id.line_ids[0].days -->
                                     <td t-if = "line.invoice_payment_term_id and line.invoice_payment_term_id.line_ids"> <span t-esc="line.invoice_payment_term_id.line_ids[0].days" /> </td>
                                     <td t-else="">0</td>
@@ -104,7 +104,7 @@
                                     <!-- <td t-if = "line.state == 'posted'"> Publicado </td>
                                     <td t-if = "line.state == 'cancel'">  Cancelada</td> -->
                                     
-                                    <td style = "text-align:right"> <span t-esc="o.get_dateresultdays(line.invoice_payment_term_id,line.invoice_date_due, line.invoice_date)" /> </td>
+                                    <td width= "5px" style = "text-align:right; width: 5px !important"> <span t-esc="o.get_dateresultdays(line.invoice_payment_term_id,line.invoice_date_due, line.invoice_date)" /> </td>
                                     
                                 </tr>
                                 <t t-if = "line.currency_id.name == 'CRC'">
@@ -156,9 +156,11 @@
                             
                         </tbody>
                     </table>
+
+
+                    <t t-raw="o.env.company.notifi_account_report"/>
                     
-                    
-                    <table class = "table">
+                    <!-- <table class = "table">
                         <thead>
                             <th>BANCO</th>
                             <th>MONEDA</th>
@@ -173,7 +175,7 @@
                                 </tr>
                             </t>
                         </tbody>
-                    </table>
+                    </table> -->
                     
 
                 </div>

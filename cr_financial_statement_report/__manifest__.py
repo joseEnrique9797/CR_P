@@ -28,6 +28,8 @@
         #'views/views.xml',
         #'views/templates.xml',
         'views/res_partner.xml',
+        'views/res_company.xml',
+        # 'views/res_config_settings_views.xml',
         'report/financial_statement_report_pdf.xml',
         'data/res_partner_server_actions.xml',
         'wizard/financial_statement_wizard.xml',
