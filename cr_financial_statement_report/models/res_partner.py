@@ -9,7 +9,7 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
     
     limit_credit_colones = fields.Float(string='Límite de crédito colones')
-    
+    employee_notify_ids = fields.Many2many(comodel_name='hr.employee', string='Notificación de pago')
     start_date = fields.Date(string="Start Date")
     end_date = fields.Date(string="End Date")
     
@@ -19,8 +19,14 @@ class ResPartner(models.Model):
     
     def get_datetime_now(self):
         return datetime.now().date()
+
+    def get_string_notify(self):
+        string_notify = ''
         
+        for rec in self.employee_notify_ids:
+            string_notify += (rec.work_email+',') if  rec.work_email else ' '
         
+        return string_notify
     @api.model
     def action_financial_statement(self,record):
         return {

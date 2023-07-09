@@ -56,6 +56,8 @@ class FinancialStatementWizard(models.TransientModel):
         
     def action_get_report_pdf(self):
         partner = self.env['res.partner'].browse(self.env.context.get('partner_id', False))
+
+        partner.employee_notify_ids = self.employee_ids.ids
         
         if self.start_date and self.end_date:
             partner.start_date =  self.start_date

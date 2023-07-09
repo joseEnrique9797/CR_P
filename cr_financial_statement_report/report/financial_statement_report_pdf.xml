@@ -159,6 +159,10 @@
 
 
                     <t t-raw="o.env.company.notifi_account_report"/>
+
+                    <div>
+                        <p>Notificaciones de Pago:  <span t-esc="o.get_string_notify()" />  </p>
+                    </div>
                     
                     <!-- <table class = "table">
                         <thead>
