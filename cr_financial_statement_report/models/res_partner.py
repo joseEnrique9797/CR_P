@@ -16,6 +16,16 @@ class ResPartner(models.Model):
     send_email = fields.Char(string='Enviar a')
     subject_email  = fields.Char(string='Asunto')
     body_email = fields.Char(string='Cuerpo')
+
+    def get_jurídica(self):
+        partner =  self.env['res.partner'].search([
+            ('name', '=', self.env.company.name)
+        ], limit = 1)
+        name = ''
+        if partner and partner.l10n_latam_identification_type_id:
+            name = partner.l10n_latam_identification_type_id.name
+        name += ' ' + partner.vat
+        return name  
     
     def get_datetime_now(self):
         return datetime.now().date()

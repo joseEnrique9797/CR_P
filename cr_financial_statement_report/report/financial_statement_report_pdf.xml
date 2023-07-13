@@ -158,10 +158,19 @@
                     </table>
 
 
+                    <div>
+                        <p> <strong> <h4> Información para Depósitos </h4> </strong> </p>
+                    </div>
+
+                    <div>
+                        <p> <strong>  Razón social : </strong> <span t-esc="o.env.company.name" /> </p> <br/>
+                        <p> <strong>  Cédula Jurídica : </strong> <span t-esc="o.get_jurídica()" /> </p>
+                    </div>
+                    
                     <t t-raw="o.env.company.notifi_account_report"/>
 
                     <div>
-                        <p>Notificaciones de Pago:  <span t-esc="o.get_string_notify()" />  </p>
+                        <p> <strong> Notificaciones de Pago: </strong>  <span t-esc="o.get_string_notify()" />  </p>
                     </div>
                     
                     <!-- <table class = "table">

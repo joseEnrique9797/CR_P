@@ -34,13 +34,13 @@ class RetentionReportXls(models.AbstractModel):
         format36= workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'valign':'middle', 'align': 'right', 'right': True, 'left': False,'bottom': False, 'top': True, 'bold': True, 'text_wrap': True,'bg_color':'#D9E1F2'})
         format37= workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'valign':'middle', 'align': 'right', 'right': False, 'left': False,'bottom': False, 'top': True, 'bold': True, 'text_wrap': True,'bg_color':'#D9E1F2'})
         format38= workbook.add_format({'font_size': 10, 'valign':'middle', 'align': 'center', 'right': False, 'left': False,'bottom': True, 'top': True, 'bold': True, 'text_wrap': True,'bg_color':'#D9E1F2'})
-        format39= workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'valign':'middle', 'align': 'center', 'right': True, 'left': False,'bottom': True, 'top': False, 'bold': True, 'text_wrap': True,'bg_color':'#D9E1F2'})
+        format39= workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'valign':'middle', 'align': 'right', 'right': True, 'left': False,'bottom': True, 'top': False, 'bold': True, 'text_wrap': True,'bg_color':'#D9E1F2'})
         
         
         
         format40 = workbook.add_format({'font_size': 10, 'align': 'left', 'right': True, 'left': True,'bottom': False, 'top': True, 'bold': True, 'text_wrap': True})
         format41 = workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'align': 'right', 'right': True, 'left': True,'bottom': False, 'top': False, 'bold': True, 'text_wrap': True})
-        format42 = workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'align': 'left', 'right': True, 'left': True,'bottom': True, 'top': False, 'bold': True, 'text_wrap': True})
+        format42 = workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'align': 'right', 'right': True, 'left': True,'bottom': True, 'top': False, 'bold': True, 'text_wrap': True})
         format43 = workbook.add_format({'num_format': '#,##0.00','font_size': 10, 'align': 'right', 'right': True, 'left': True,'bottom': True, 'top': True, 'bold': True, 'text_wrap': True})
         
         format50 = workbook.add_format({'font_size': 10, 'align': 'left', 'right': False, 'left': False,'bottom': False, 'top': False, 'bold': True, 'text_wrap': False,'underline':1})
@@ -277,7 +277,17 @@ class RetentionReportXls(models.AbstractModel):
         sheet.write(row+2,0,'Razón social',format51)
         sheet.write(row+2,1,self.env.company.name,format52)
         sheet.write(row+3,0,'Cédula Jurídica',format51)
-        sheet.write(row+3,1,'0-000-000000',format52)
+        
+        
+        partner_comp =  self.env['res.partner'].search([
+            ('name', '=', self.env.company.name)
+        ], limit = 1)
+        name_comp = ''
+        if partner_comp and partner_comp.l10n_latam_identification_type_id:
+            name = partner_comp.l10n_latam_identification_type_id.name
+        name_comp += ' ' + partner_comp.vat
+        
+        sheet.write(row+3,1, name_comp  ,format52)
         
         
         row+=5
