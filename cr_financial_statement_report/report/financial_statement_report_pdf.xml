@@ -164,7 +164,7 @@
 
                     <div>
                         <p> <strong>  Razón social : </strong> <span t-esc="o.env.company.name" /> </p> <br/>
-                        <p> <strong>  Cédula Jurídica : </strong> <span t-esc="o.get_jurídica()" /> </p>
+                        <p> <strong>  <span t-esc="o.get_jurídica()" /> </strong> </p>
                     </div>
                     
                     <t t-raw="o.env.company.notifi_account_report"/>

@@ -278,13 +278,16 @@ class RetentionReportXls(models.AbstractModel):
         sheet.write(row,0,'Información para Depósitos',format50)
         sheet.write(row+2,0,'Razón social',format51)
         sheet.write(row+2,1,self.env.company.name,format52)
-        if partner_comp.l10n_latam_identification_type_id:
-            sheet.write(row+3,0,partner_comp.l10n_latam_identification_type_id.name,format51)
-        
         
         partner_comp =  self.env['res.partner'].search([
             ('name', '=', self.env.company.name)
         ], limit = 1)
+        
+        if partner_comp.l10n_latam_identification_type_id:
+            sheet.write(row+3,0,partner_comp.l10n_latam_identification_type_id.name,format51)
+        
+        
+        
         name_comp = ''
         # if partner_comp and partner_comp.l10n_latam_identification_type_id:
         #     name = 
