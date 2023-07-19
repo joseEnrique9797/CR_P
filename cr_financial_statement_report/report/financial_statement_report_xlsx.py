@@ -120,7 +120,7 @@ class RetentionReportXls(models.AbstractModel):
         # sheet.write(11,9,'0',format42)
         
         # Second
-        sheet.write(13,0,'FEHCA EMISIÓN',format33)
+        sheet.write(13,0,'FECHA EMISIÓN',format33)
         sheet.write(13,1,'DÍAS CRÉDITO',format33)
         sheet.write(13,2,'FECHA VENCIMIENTO',format33)
         sheet.write(13,3,'REFERENCIA',format33)
@@ -139,6 +139,7 @@ class RetentionReportXls(models.AbstractModel):
         if data['all_invoice']:
             lines_account = self.env['account.move'].search([
                 ('partner_id','=', partner_id.id ),
+                ('state','=', 'posted'),
                 ('move_type','in', ['out_invoice'] ),
                 ('payment_state','in', ['in_payment', 'partial', 'not_paid'] ),
             ])
@@ -148,11 +149,12 @@ class RetentionReportXls(models.AbstractModel):
                 if l.amount_total  - l.amount_residual > 0:
                     lines_filtered.append(l.id)
             
-            lines_account = self.env['account.move'].browse(lines_filtered)
+            lines_account = self.env['account.move'].browse(lines_account.ids)
         
         else:
             lines_account = self.env['account.move'].search([
                 ('partner_id','=', partner_id.id ),
+                ('state','=', 'posted'),
                 ('payment_state','in', ['in_payment', 'partial', 'not_paid'] ),
                 ('move_type','in', ['out_invoice'] ),
                 ('invoice_date','>=', data['start_date'] ),
@@ -164,7 +166,7 @@ class RetentionReportXls(models.AbstractModel):
                 if l.amount_total  - l.amount_residual > 0:
                     lines_filtered.append(l.id)
             
-            lines_account = self.env['account.move'].browse(lines_filtered)
+            lines_account = self.env['account.move'].browse(lines_account.ids)
         
         total_colones = 0
         total_dolares = 0
@@ -276,15 +278,16 @@ class RetentionReportXls(models.AbstractModel):
         sheet.write(row,0,'Información para Depósitos',format50)
         sheet.write(row+2,0,'Razón social',format51)
         sheet.write(row+2,1,self.env.company.name,format52)
-        sheet.write(row+3,0,'Cédula Jurídica',format51)
+        if partner_comp.l10n_latam_identification_type_id:
+            sheet.write(row+3,0,partner_comp.l10n_latam_identification_type_id.name,format51)
         
         
         partner_comp =  self.env['res.partner'].search([
             ('name', '=', self.env.company.name)
         ], limit = 1)
         name_comp = ''
-        if partner_comp and partner_comp.l10n_latam_identification_type_id:
-            name = partner_comp.l10n_latam_identification_type_id.name
+        # if partner_comp and partner_comp.l10n_latam_identification_type_id:
+        #     name = 
         name_comp += ' ' + partner_comp.vat
         
         sheet.write(row+3,1, name_comp  ,format52)

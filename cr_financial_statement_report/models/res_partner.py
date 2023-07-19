@@ -162,6 +162,7 @@ class ResPartner(models.Model):
         if self.start_date and self.end_date:
             lines_account = self.env['account.move'].search([
                 ('partner_id','=', self.id ),
+                ('state','=', 'posted'),
                 ('invoice_date','>=', self.start_date ),
                 ('invoice_date','<=', self.end_date ),
                 ('move_type','in', ['out_invoice'] ),
@@ -175,7 +176,7 @@ class ResPartner(models.Model):
                     lines_filtered.append(l.id)
 
             
-            lines_account = self.env['account.move'].browse(lines_filtered)
+            lines_account = self.env['account.move'].browse(lines_account.ids)
 
             
             self.start_date = False
@@ -186,6 +187,7 @@ class ResPartner(models.Model):
         else:
             lines_account = self.env['account.move'].search([
                 ('partner_id','=', self.id ),
+                ('state','=', 'posted'),
                 ('move_type','in', ['out_invoice'] ),
                 ('payment_state','in', ['in_payment', 'partial', 'not_paid'] ),
             ])
@@ -195,7 +197,7 @@ class ResPartner(models.Model):
                     lines_filtered.append(l.id)
 
             
-            lines_account = self.env['account.move'].browse(lines_filtered)
+            lines_account = self.env['account.move'].browse(lines_account.ids)
             
             return lines_account
 

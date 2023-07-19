@@ -26,6 +26,9 @@ class FinancialStatementWizard(models.TransientModel):
         ])
         if not lines_account:
             raise ValidationError('No hay facturas disponibles para este cliente.')
+
+        if not self.env.company.notifi_account_report:
+            raise ValidationError('En la comfiguracion de la compañía, defina cuentas para estados cliente.')
         
         data = {'start_date': self.start_date, 'end_date': self.end_date, 'all_invoice': self.all_invoice, 'employee_ids': self.employee_ids.ids, 'date':datetime.now().date()}
         data['partner_id'] = self.env.context.get('partner_id', False)
