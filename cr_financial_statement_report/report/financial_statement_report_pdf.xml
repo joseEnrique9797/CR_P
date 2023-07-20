@@ -73,10 +73,10 @@
                             <th style = "background-color:#D9E1F2; width: 100px !important">REFERENCIA</th>
                             <th style = "background-color:#D9E1F2; width: 100px !important">MONEDA ORIGEN</th>
                             <th style = "background-color:#D9E1F2; width: 100px !important">IMPORTE</th>
-                            <th style = "background-color:#D9E1F2; width: 100px !important">ABONOS/DEVOLUCIONES</th>
+                            <th style = "background-color:#D9E1F2; width: 100px !important">ABONOS/<h6><strong>DEVOL.</strong></h6></th>
                             <th style = "background-color:#D9E1F2; width: 100px !important">SALDO ACTUAL</th>
-                            <th style = "background-color:#D9E1F2; width: 100px !important">ESTADO</th>
-                            <th width= "5px" style = "background-color:#D9E1F2; width: 5px !important">DÍAS VENCIMIENTO</th>
+                            <th style = "background-color:#D9E1F2; width: 100px !important">ESTADO<h6 style = "color:transparent">Estadoparave</h6></th>
+                            <th width= "5px" style = "background-color:#D9E1F2; width: 5px !important">DÍAS VENCI.</th>
                         </thead>
                         <tbody>
                             <t t-set="u_sum_amount_total" t-value="0"/>

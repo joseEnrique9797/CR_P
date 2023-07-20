@@ -63,7 +63,7 @@ class ResPartner(models.Model):
         else :
             if invoice_date_due:
                 dateresult = datetime.now().date() - invoice_date_due
-                dateresultdays = dateresult.days * -1
+                dateresultdays = dateresult.days
                 
                 
                 return dateresultdays
