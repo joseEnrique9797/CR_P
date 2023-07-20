@@ -102,7 +102,8 @@ class RetentionReportXls(models.AbstractModel):
         sheet.write(8,0,'CLIENTE',format31)
         sheet.merge_range('B9:H9',partner_id.name,format41)
         sheet.write(8,8,'LIMITE CRÉDITO' + ' (' +tarifa_currency.name + ')',format31)
-        sheet.write(8,9, limite_tarifa_credito ,format41)
+        # sheet.write(8,9, partner_id.get_symbol_report() + ' ' + str( partner_id.get_limite_tarifa_credito() ) ,format41)
+        sheet.write(8,9, partner_id.get_limite_tarifa_credito() ,format41)
         
         sheet.write(9,0,'CONTRIBUYENTE',format31)
         sheet.merge_range('B10:H10', partner_id.vat,format41)
@@ -265,12 +266,26 @@ class RetentionReportXls(models.AbstractModel):
         
         sheet.write(row,7, (round(total_colones, 2)),format36)
         sheet.write(row+1,7,  (round(total_dolares, 2)),format39)
+
+
+
+
+
+
+
         
         total_mont_convert = total_colones + (total_dolares * tarifa_currency.rate) 
-        sheet.write(9,9,round(total_mont_convert, 2),format41)
+
+
+
+        partner_id
+        
+        # sheet.write(9,9, partner_id.get_symbol_report() + ' ' + str( round(partner_id.get_total_mont_convert(), 2) ),format41)
+        sheet.write(9,9, partner_id.get_total_mont_convert(),format41)
         
         restante = limite_tarifa_credito - total_mont_convert
-        sheet.write(10,9,round(restante, 2),format42)
+        # sheet.write(10,9,  partner_id.get_symbol_report() + ' ' + str( round(partner_id.get_limite_tarifa_credito() - partner_id.get_total_mont_convert(), 2) ) ,format41)
+        sheet.write(10,9, partner_id.get_limite_tarifa_credito() - partner_id.get_total_mont_convert() ,format41)
         
         # Other Info
         

@@ -98,12 +98,32 @@ class ResPartner(models.Model):
                 total_importe_colones += res.amount_total
                 total_devoluciones_colones += dev
                 
-        total_mont_convert = total_colones + (total_dolares * tarifa_currency.rate) 
-        restante = all - total_mont_convert
+        # total_mont_convert = total_colones + (total_dolares * tarifa_currency.rate) 
+
+
+        if tarifa_currency.symbol == '$':
+
+            currency_crc = self.env['res.currency'].search([
+                ('name','=', 'CRC')
+            ], limit = 1)
+
+            if currency_crc:
+                total_mont_convert = total_dolares  + (total_colones / currency_crc.rate) 
+            else :
+                total_mont_convert = total_dolares
+        else :
+        
+            restante = all - total_mont_convert
+        
         return restante
     
-    
-    
+    def get_symbol_report(self):
+        symbol = ''
+        if self.property_product_pricelist and self.property_product_pricelist.currency_id:
+            symbol = self.property_product_pricelist.currency_id.name
+        return symbol
+
+        
     def get_total_mont_convert(self):
         lines_account = self.get_accounts_partner()
         restante = 0
@@ -132,7 +152,19 @@ class ResPartner(models.Model):
                 total_importe_colones += res.amount_total
                 total_devoluciones_colones += dev
                 
-        total_mont_convert = total_colones + (total_dolares * tarifa_currency.rate) 
+        if tarifa_currency.symbol == '$':
+
+            currency_crc = self.env['res.currency'].search([
+                ('name','=', 'CRC')
+            ], limit = 1)
+
+            if currency_crc:
+                total_mont_convert = total_dolares  + (total_colones / currency_crc.rate) 
+            else :
+                total_mont_convert = total_dolares
+        else :
+            total_mont_convert = total_colones + (total_dolares * tarifa_currency.rate) 
+        
         return total_mont_convert
         
     
@@ -142,10 +174,10 @@ class ResPartner(models.Model):
         tarifa_currency_symbol = tarifa_currency.name if tarifa_currency else ''
         
         limite_tarifa_credito = 0
-        if tarifa_currency_symbol == 'CRC':
+        if self.is_limit_in_colones:
             limite_tarifa_credito = self.limit_credit_colones
         
-        if tarifa_currency_symbol == 'USD':
+        else :
             limite_tarifa_credito = self.limit_credit
         
         return limite_tarifa_credito
