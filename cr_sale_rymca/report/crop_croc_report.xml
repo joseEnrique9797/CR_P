@@ -164,10 +164,13 @@
                                   
                                   
                                   <td style="width:10%;text-align:center;">
-                                      <span t-esc="o.currency_id.symbol"/> <span t-field="line.price_unit"/>
+                                      <span t-esc="o.currency_id.symbol"/> <span  t-esc="'{:,.4f}'.format(line.price_unit)"/>
+                                      <!-- <span t-esc="o.currency_id.symbol"/> <span t-field="line.price_unit"/> -->
                                   </td>
                                   <td style="width:10%;text-align:center;">
-                                      <span t-field="line.price_subtotal"/>
+                                      <!-- t-esc="'{:,.4f}'.format(line.price_subtotal)"  -->
+                                      <span t-esc="'{:,.4f}'.format(line.price_subtotal)" />
+                                      <!-- <span t-field="line.price_subtotal"/> -->
                                   </td>
 <!--                                   <td style="width:10%;text-align:center;" t-esc="line.price_subtotal" t-esc-options="{'widget': 'monetary', 'display_currency': 'o.currency'}"/> -->
                               </tr>
@@ -180,7 +183,9 @@
                     <table border="0" cellspacing="0" cellpadding="0" style="width:100%">
                         <tr>
                             <td style="width:85%;text-align:right;"> <span>Total Mercadería: </span></td>
-                            <td style="width:15%;text-align:right;"> <span t-field="o.amount_untaxed"/> </td>
+                            
+                            <td style="width:15%;text-align:right;"> <span t-esc="'{:,.4f}'.format(o.amount_untaxed)"/> </td>
+                            <!-- <td style="width:15%;text-align:right;"> <span t-field="o.amount_untaxed"/> </td> -->
                         </tr>
                         <tr>
                             <td style="width:85%;text-align:right;"> <span>Descuento: </span></td>
@@ -188,7 +193,9 @@
                         </tr>
                         <tr>
                             <td style="width:85%;text-align:right;"> <span>Impuesto de Ventas: </span></td>
-                            <td style="width:15%;text-align:right;"> <span t-field="o.amount_tax" /> </td>
+                            <!-- t-esc="'{:,.4f}'.format(line.price_subtotal)" -->
+                            <td style="width:15%;text-align:right;"> <span t-esc="'{:,.4f}'.format(o.amount_tax)" /> </td>
+                            <!-- <td style="width:15%;text-align:right;"> <span t-field="o.amount_tax" /> </td> -->
                         </tr>
                         <tr>
                             <td style="width:85%;text-align:right;"> <span>Flete: </span></td>
@@ -196,7 +203,8 @@
                         </tr>
                         <tr>
                             <td style="width:85%;text-align:right;"> <span style="font-weight:bold;">Total: </span></td>
-                            <td style="width:15%;text-align:right;"> <span t-field="o.amount_total"/> </td>
+                            <!-- <td style="width:15%;text-align:right;"> <span t-field="o.amount_total"/> </td> -->
+                             <td style="width:15%;text-align:right;"> <span t-esc="'{:,.4f}'.format(o.amount_total)"/> </td>
                         </tr>
                     </table>
                     

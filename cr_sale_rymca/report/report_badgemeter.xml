@@ -266,11 +266,15 @@
                                   <td style="width:5%;" t-esc="line.product_qty"/>
                                   
                                   <td style="width:8%;">
-                                      <span t-esc="o.currency_id.symbol"/> <span t-field="line.price_unit"/>
+                                      
+                                      <span t-esc="o.currency_id.symbol"/> <span t-esc="'{:,.4f}'.format(line.price_unit)"/>
+                                      <!-- <span t-esc="o.currency_id.symbol"/> <span t-field="line.price_unit"/> -->
                                   </td>
                                   
                                   <td style="width:8%;">
-                                      <span t-field="line.price_subtotal"/>
+                                      <!-- t-esc="'{:,.4f}'.format(total)" -->
+                                      <span t-esc="'{:,.4f}'.format(total)"/>
+                                      <!-- <span t-field="line.price_subtotal"/> -->
                                   </td>
                                   
 <!--                                   <td style="width:10%;" t-esc="line.price_subtotal" t-esc-options="{'widget': 'monetary', 'display_currency': 'o.currency'}"/> -->
@@ -287,7 +291,7 @@
 <!--                               <td t-esc="total"/> -->
                                 
                                 <td style="width:8%;">
-                                      <span t-esc="o.currency_id.symbol"/> <span  t-esc="'{:,}'.format(total)"  />
+                                      <span t-esc="o.currency_id.symbol"/> <span  t-esc="'{:,.4f}'.format(total)"  />
                                 </td>
                                   
                             </tr>

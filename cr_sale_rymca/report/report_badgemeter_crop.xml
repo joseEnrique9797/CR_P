@@ -105,7 +105,7 @@
                               </tr>
                           </table>
                         
-                        <p style="text-indent: 0pt;text-align: center;font-size:20px;font-weight: bold;">PURCHASE ORDER </p>
+                        <p style="text-indent: 0pt;text-align: center;font-size:20px;font-weight: bold;">PURCHASE ORDER  22222 </p>
                     </h1>
                     
                     <div class="float-right">
@@ -335,11 +335,13 @@
                                   <td style="width:5%;" t-esc="line.product_qty"/>
                                   
                                   <td style="width:10%;text-align:center;">
-                                      <span t-esc="o.currency_id.symbol"/> <span t-field="line.price_unit"/>
+                                      <span t-esc="o.currency_id.symbol"/> <span   t-esc="'{:,.4f}'.format(line.price_unit)"/>
+                                      <!-- <span t-esc="o.currency_id.symbol"/> <span   t-field="line.price_unit"/> -->
                                   </td>
                                   
                                   <td style="width:10%;text-align:center;">
-                                    <span t-field="line.price_subtotal"/>
+                                        <span t-esc="'{:,.4f}'.format(line.price_subtotal)"/>
+                                      <!-- <span t-field="line.price_subtotal"/> -->
                                   </td>
                                   
 <!--                                   <td style="width:5%;" t-esc="line.price_unit" t-esc-options="{'widget': 'monetary', 'display_currency': 'o.currency'}"/>
@@ -355,7 +357,7 @@
                               <td/><td/>
                               <td>Total</td>
                                 <td style="width:10%;text-align:center;">
-                                      <span t-esc="o.currency_id.symbol"/> <span  t-esc="'{:,}'.format(total)"  />
+                                      <span t-esc="o.currency_id.symbol"/> <span  t-esc="'{:,.4f}'.format(total)"  />
                                   </td>
 <!--                               <td t-esc="total"/> -->
                             </tr>
