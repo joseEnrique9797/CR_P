@@ -18,9 +18,17 @@ class purchaseConsolidate(models.Model):
 
     line_ids = fields.One2many('purchase.consolidate.line', 'consolidate_id', string='Productos')
     purchase_ids = fields.Many2many('purchase.order', string='purchase')
+    
+    partner_list_ids = fields.Many2many('res.partner', string='Proveedores')
 
     purchase_count = fields.Integer('', compute = 'set_purchase_count')
 
+    # def unlink(self):
+    #     for rec in self:
+    #        if rec.state != 'draft':
+    #            raise ValidationError("No se puede borrar una consolidacion en estado confirmado")
+    #     return super(ReportAccountFinancialReport, self).unlink()
+    
     def action_confirm(self):
         self.state = 'done'
         self.name = self.env['ir.sequence'].next_by_code('purchase.consolidate')
@@ -49,6 +57,16 @@ class purchaseConsolidate(models.Model):
     consolidate_id = fields.Many2one('purchase.consolidate', string='Producto')
     qty = fields.Float('Cantidad')
     price_unit = fields.Float('Costo compra')
+
+    state = fields.Selection([
+        ('draft', 'Borrador'),
+        ('done', 'Confirmado'),
+        ('canel', 'Cancel'),
+    ], string='Estado', default = 'draft', related = 'consolidate_id.state')
+    
+    def action_desp_set(self):
+        for rec in self:
+            pass
 
     
 

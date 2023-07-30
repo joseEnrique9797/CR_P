@@ -7,6 +7,13 @@ from odoo.exceptions import ValidationError
 class purchaseConsolidateWizard(models.TransientModel):
     _name = "purchase.consolidate.wizard"
 
+    def get_ids_partners(self, objs):
+        array = []
+        for rec in objs:
+            if rec.partner_id.id not in  array:
+                array.append(rec.partner_id.id)
+        return array
+    
     def action_confirm(self):
         purchase = self.env['purchase.order'].browse(self._context.get('active_ids'))
 
@@ -22,11 +29,13 @@ class purchaseConsolidateWizard(models.TransientModel):
                     },
                 ))
         # self.env['ir.sequence'].next_by_code('purchase.consolidate')
+        data_partner = self.get_ids_partners(purchase)
         self.env['purchase.consolidate'].create({
             'name': 'Nuevo',
             'line_ids':lines,
             'date':datetime.now(),
             'purchase_ids':purchase.ids,
+            'partner_list_ids':data_partner,
         })
                 
         
