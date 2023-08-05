@@ -13,6 +13,7 @@ class purchaseConsolidate(models.Model):
     date = fields.Date('Fecha')
     state = fields.Selection([
         ('draft', 'Borrador'),
+        ('pending', 'Pendiente recibir'),
         ('done', 'Confirmado'),
         ('cancel', 'Cancelado'),
     ], string='Estado', default = 'draft')
@@ -54,8 +55,11 @@ class purchaseConsolidate(models.Model):
             
     
     def action_confirm(self):
-        self.state = 'done'
+        self.state = 'pending'
         self.name = self.env['ir.sequence'].next_by_code('purchase.consolidate')
+
+    def action_confirm_dos(self):
+        self.state = 'done'
     
     def set_purchase_count(self):
         for rec in self:

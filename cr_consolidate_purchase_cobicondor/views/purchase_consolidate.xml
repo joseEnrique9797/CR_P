@@ -18,9 +18,34 @@
         <field name="arch" type="xml">
             <tree string="Consolidación" >
                 <field name="name" readonly = "1" /> 
+                <field name="num_emb" readonly = "1" /> 
                 <field name="date" readonly = "1" />
                 <field name="cost_total" readonly = "1" />
                 <field name="state" readonly = "1" />
+                
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="purchase_consolidate_lines_list" model="ir.ui.view">
+        <field name="name">purchase.consolidate.lines.list</field>
+        <field name="model">purchase.consolidate.line</field>
+        <field eval="6" name="priority"/>
+        <field name="arch" type="xml">
+            <tree string="Consolidación" >
+                <field name="product_id" force_save = "1"  />
+                <field name="state" invisible = "1" />
+                
+                <field name="qty" force_save = "1" />
+                <field name="qty_received" force_save = "1" />
+                <field name="qty_restant" force_save = "1" />
+                
+                <field name="price_unit" />
+                <field name="cost_subtotal" />
+                <field name="purchase_line_data_id" force_save = "1" invisible = "1" />
+                
+                <field name="purchase_line_id" string = "Pedido de compra" force_save = "1" />
                 
             </tree>
         </field>
@@ -52,9 +77,10 @@
                 <form string="Follow-up Steps">
                     <header>
                         
-                        <button string="Confirmar" attrs="{'invisible': [('state', '!=', 'draft')]}"  name="action_confirm" type="object" class="btn-primary"/>
-                        <button string="Cancelar" attrs="{'invisible': [('state', '!=', 'done')]}"  name="action_cancel" type="object" class="btn-primary"/>
-                        <field name="state" widget="statusbar" readonly ="1"/>
+                        <button string="Comenzar recepción" attrs="{'invisible': [('state', '!=', 'draft')]}"  name="action_confirm" type="object" class="btn-primary"/>
+                        <button string="Confirmar" attrs="{'invisible': [('state', '!=', 'pending')]}"  name="action_confirm_dos" type="object" class="btn-primary"/>
+                        <!-- <button string="Cancelar" attrs="{'invisible': [('state', '!=', 'done')]}"  name="action_cancel" type="object" class="btn-primary"/> -->
+                        <field name="state" widget="statusbar" statusbar_visible="draft,pending,done" readonly ="1"/>
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
@@ -97,7 +123,7 @@
                                         <field name="purchase_line_data_id" force_save = "1" invisible = "1" />
                                         
                                         <field name="purchase_line_id" string = "Pedido de compra" force_save = "1" />
-                                        <button name="action_desp_set" string="Recibir" attrs="{'invisible': [('state', 'in', ['draft','cancel'])]}" type="object" />
+                                        <button name="action_desp_set" string="Recibir" attrs="{'invisible': [('state', 'in', ['draft','cancel','done'])]}" type="object" />
                                     </tree>
                                 </field>
                             </page>
@@ -114,5 +140,15 @@
         <field name="view_mode">tree,form</field>
     </record>
 
+    <record id="purchase_consolidate_lines_action" model="ir.actions.act_window">
+        <field name="name">Lineas Consolidaciónes</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.consolidate.line</field>
+        <field name="context">{ 'create': False, 'edit':  False}</field> 
+        <field name="view_mode">tree,form</field>
+    </record>
+
      <menuitem id="purchase_consolidate_menu" name="Consolidaciónes" sequence="6" parent="purchase.menu_procurement_management" action="purchase_consolidate_action" />
+
+         <menuitem id="purchase_consolidate_lines_item_menu" name="Lineas Consolidaciónes" sequence="7" parent="purchase.menu_procurement_management" action="purchase_consolidate_lines_action" />
 </odoo>
