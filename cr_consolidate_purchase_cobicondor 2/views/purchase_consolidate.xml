@@ -1,0 +1,154 @@
+<odoo>
+    
+    <record id="purchase_consolidate_action_general" model="ir.actions.act_window">
+        <field name="name">Crear consolidación</field>
+        <field name="res_model">purchase.consolidate.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <!-- purchase -->
+        <!-- cr_consolidate_purchase_cobicondor -->
+        <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+        <field name="binding_view_types">list</field>
+    </record>
+
+    <record id="purchase_consolidate_lines_list" model="ir.ui.view">
+        <field name="name">purchase.consolidate.lines.list</field>
+        <field name="model">purchase.consolidate</field>
+        <field eval="6" name="priority"/>
+        <field name="arch" type="xml">
+            <tree string="Consolidación" >
+                <field name="name" readonly = "1" /> 
+                <field name="num_emb" readonly = "1" /> 
+                <field name="date" readonly = "1" />
+                <field name="cost_total" readonly = "1" />
+                <field name="state" readonly = "1" />
+                
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="purchase_consolidate_lines_list" model="ir.ui.view">
+        <field name="name">purchase.consolidate.lines.list</field>
+        <field name="model">purchase.consolidate.line</field>
+        <field eval="6" name="priority"/>
+        <field name="arch" type="xml">
+            <tree string="Consolidación" >
+                <field name="product_id" force_save = "1"  />
+                <field name="state" invisible = "1" />
+                
+                <field name="qty" force_save = "1" />
+                <field name="qty_received" force_save = "1" />
+                <field name="qty_restant" force_save = "1" />
+                
+                <field name="price_unit" />
+                <field name="cost_subtotal" />
+                <field name="purchase_line_data_id" force_save = "1" invisible = "1" />
+                
+                <field name="purchase_line_id" string = "Pedido de compra" force_save = "1" />
+                
+            </tree>
+        </field>
+    </record>
+
+    
+    <record id="purchase_consolidate_view_search" model="ir.ui.view">
+        <field name="name">purchase.consolidate.view.search</field>
+        <field name="model">purchase.consolidate</field>
+        <field name="arch" type="xml">
+            <search string="Search Description">
+                <field name="name"/>
+                <field name="num_emb"/>
+                
+                <separator/>
+                <group string="Group By" expand="0">
+                    <filter string="state" name="groupby_insured_id" context="{'group_by': 'state'}"/>
+                  
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+    <record id="purchase_consolidate_form" model="ir.ui.view">
+            <field name="name">purchase.consolidate.form</field>
+            <field name="model">purchase.consolidate</field>
+            <field name="arch" type="xml">
+                <form string="Follow-up Steps">
+                    <header>
+                        
+                        <button string="Comenzar recepción" attrs="{'invisible': [('state', '!=', 'draft')]}"  name="action_confirm" type="object" class="btn-primary"/>
+                        <button string="Confirmar" attrs="{'invisible': [('state', '!=', 'pending')]}"  name="action_confirm_dos" type="object" class="btn-primary"/>
+                        <!-- <button string="Cancelar" attrs="{'invisible': [('state', '!=', 'done')]}"  name="action_cancel" type="object" class="btn-primary"/> -->
+                        <field name="state" widget="statusbar" statusbar_visible="draft,pending,done" readonly ="1"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" name="purchase_list_get" type="object" icon="fa-list-ol ">
+                                <field name="purchase_count" widget="statinfo" string="Ordenes de compra"/>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name" attrs="{'invisible': [('name', '=', False)]}" readonly = "1" />
+                                <field name="date" string = "Fecha de Creación" readonly = "1" />
+                                <field name="cost_total" readonly = "1" />
+                                <field name="num_emb" required = "1" />
+                                
+                                <!-- <field name="create_by_id" readonly = "1" /> -->
+                            </group>
+
+                            <group>
+                                
+                                <field name="currency_id" string = "Moneda" readonly = "1" />
+                                <field name="create_uid" string = "Creado por" readonly = "1" />
+                                <field name="partner_list_ids" string = "Lista de proveedores " readonly = "1"  widget="many2many_tags" />
+                            </group>
+
+                            	
+                        </group>
+                        <notebook>
+                            <page string="Consolidaciones">
+                                <field name="line_ids" readonly= "1" >
+                                    <tree editable="bottom">
+                                        <field name="product_id" force_save = "1"  />
+                                        <field name="state" invisible = "1" />
+                                        
+                                        <field name="qty" force_save = "1" />
+                                        <field name="qty_received" force_save = "1" />
+                                        <field name="qty_restant" force_save = "1" />
+                                        
+                                        <field name="price_unit" />
+                                        <field name="cost_subtotal" />
+                                        <field name="purchase_line_data_id" force_save = "1" invisible = "1" />
+                                        
+                                        <field name="purchase_line_id" string = "Pedido de compra" force_save = "1" />
+                                        <button name="action_desp_set" string="Recibir" attrs="{'invisible': [('state', 'in', ['draft','cancel','done'])]}" type="object" />
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    <record id="purchase_consolidate_action" model="ir.actions.act_window">
+        <field name="name">Consolidaciónes</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.consolidate</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="purchase_consolidate_lines_action" model="ir.actions.act_window">
+        <field name="name">Lineas Consolidaciónes</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.consolidate.line</field>
+        <field name="context">{ 'create': False, 'edit':  False}</field> 
+        <field name="view_mode">tree,form</field>
+    </record>
+
+     <menuitem id="purchase_consolidate_menu" name="Consolidaciónes" sequence="6" parent="purchase.menu_procurement_management" action="purchase_consolidate_action" />
+
+         <menuitem id="purchase_consolidate_lines_item_menu" name="Lineas Consolidaciónes" sequence="7" parent="purchase.menu_procurement_management" action="purchase_consolidate_lines_action" />
+</odoo>
