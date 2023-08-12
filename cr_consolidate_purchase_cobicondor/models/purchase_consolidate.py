@@ -81,6 +81,10 @@ class purchaseConsolidateLine(models.Model):
     _name = "purchase.consolidate.line"
 
 
+    name = fields.Char('Número', related = 'consolidate_id.name' )
+    num_emb = fields.Char('Número de embarque', related = 'consolidate_id.num_emb', store=True)
+    date = fields.Date('Fecha', related = 'consolidate_id.date')
+
     
     purchase_line_id = fields.Many2one('purchase.order', string='purchase')
     purchase_line_data_id = fields.Many2one('purchase.order.line', string='purchase')

@@ -28,12 +28,16 @@
     </record>
 
 
-    <record id="purchase_consolidate_lines_list" model="ir.ui.view">
+    <record id="purchase_consolidate_lines_list_lines_all" model="ir.ui.view">
         <field name="name">purchase.consolidate.lines.list</field>
         <field name="model">purchase.consolidate.line</field>
         <field eval="6" name="priority"/>
         <field name="arch" type="xml">
             <tree string="Consolidación" >
+                <field name="name" force_save = "1"  />
+                <field name="num_emb" force_save = "1"  />
+                <field name="date" force_save = "1"  />
+                
                 <field name="product_id" force_save = "1"  />
                 <field name="state" invisible = "1" />
                 
@@ -51,6 +55,22 @@
         </field>
     </record>
 
+    <record id="purchase_consolidate_lines_view_search" model="ir.ui.view">
+        <field name="name">purchase.consolidate.view.search</field>
+        <field name="model">purchase.consolidate.line</field>
+        <field name="arch" type="xml">
+            <search string="Search Description">
+                <field name="name"/>
+                <field name="num_emb"/>
+                
+                <separator/>
+                <group string="Group By" expand="0">
+                    <filter string="Número de embarque" name="groupby_num_emb_id" context="{'group_by': 'num_emb'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
     
     <record id="purchase_consolidate_view_search" model="ir.ui.view">
         <field name="name">purchase.consolidate.view.search</field>
