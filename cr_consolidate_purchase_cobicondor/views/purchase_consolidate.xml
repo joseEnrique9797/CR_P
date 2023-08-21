@@ -42,6 +42,7 @@
                 <field name="state" invisible = "1" />
                 
                 <field name="qty" force_save = "1" />
+                <field name="qty_transito" force_save = "1" />
                 <field name="qty_received" force_save = "1" />
                 <field name="qty_restant" force_save = "1" />
                 
@@ -97,7 +98,8 @@
                 <form string="Follow-up Steps">
                     <header>
                         
-                        <button string="Comenzar recepción" attrs="{'invisible': [('state', '!=', 'draft')]}"  name="action_confirm" type="object" class="btn-primary"/>
+                        <button string="Definir número de embarque" attrs="{'invisible': [('state', '!=', 'draft')]}"  name="action_confirm" type="object" class="btn-primary"/>
+                        <button string="Pasar a recibido" attrs="{'invisible': [('state', '!=', 'transit')]}"  name="action_pending" type="object" class="btn-primary"/>
                         <button string="Confirmar" attrs="{'invisible': [('state', '!=', 'pending')]}"  name="action_confirm_dos" type="object" class="btn-primary"/>
                         <!-- <button string="Cancelar" attrs="{'invisible': [('state', '!=', 'done')]}"  name="action_cancel" type="object" class="btn-primary"/> -->
                         <field name="state" widget="statusbar" statusbar_visible="draft,pending,done" readonly ="1"/>
@@ -129,21 +131,22 @@
                         </group>
                         <notebook>
                             <page string="Consolidaciones">
-                                <field name="line_ids" readonly= "1" >
+                                <field name="line_ids"  >
                                     <tree editable="bottom">
-                                        <field name="product_id" force_save = "1"  />
-                                        <field name="state" invisible = "1" />
+                                        <field name="product_id" force_save = "1" readonly= "1" />
+                                        <field name="state" invisible = "1" readonly= "1" />
                                         
-                                        <field name="qty" force_save = "1" />
-                                        <field name="qty_received" force_save = "1" />
-                                        <field name="qty_restant" force_save = "1" />
+                                        <field name="qty" force_save = "1" readonly= "1" />
+                                        <field name="qty_transito" force_save = "1" attrs="{'invisible': [('readonly', 'in', ['draft','transit','cancel','done'])]}" />
+                                        <field name="qty_received" force_save = "1" readonly= "1" />
+                                        <field name="qty_restant" force_save = "1" readonly= "1" />
                                         
-                                        <field name="price_unit" />
-                                        <field name="cost_subtotal" />
-                                        <field name="purchase_line_data_id" force_save = "1" invisible = "1" />
+                                        <field name="price_unit" readonly= "1" />
+                                        <field name="cost_subtotal" readonly= "1" />
+                                        <field name="purchase_line_data_id" force_save = "1" invisible = "1" readonly= "1" />
                                         
-                                        <field name="purchase_line_id" string = "Pedido de compra" force_save = "1" />
-                                        <button name="action_desp_set" string="Recibir" attrs="{'invisible': [('state', 'in', ['draft','cancel','done'])]}" type="object" />
+                                        <field name="purchase_line_id" string = "Pedido de compra" force_save = "1" readonly= "1" />
+                                        <button name="action_desp_set" string="Recibir" attrs="{'invisible': [('state', 'in', ['draft','transit','cancel','done'])]}" type="object" />
                                     </tree>
                                 </field>
                             </page>

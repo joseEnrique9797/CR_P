@@ -13,7 +13,8 @@ class purchaseConsolidate(models.Model):
     date = fields.Date('Fecha')
     state = fields.Selection([
         ('draft', 'Borrador'),
-        ('pending', 'Pendiente recibir'),
+        ('transit', 'En transito'),
+        ('pending', 'Recibido'),
         ('done', 'Confirmado'),
         ('cancel', 'Cancelado'),
     ], string='Estado', default = 'draft')
@@ -47,16 +48,26 @@ class purchaseConsolidate(models.Model):
 
     def set_company_currency_id(self):
         for rec in self:
-            company = self.env['res.company'].search([
-                ('id','>',0)
-            ], limit = 1)
+            # company = self.env['res.company'].search([
+            #     ('id','>',0)
+            # ], limit = 1)
 
-            rec.currency_id = company.currency_id
+            currency = self.env['res.currency'].search([
+                ('name', '=', 'USD'),
+                ('symbol', '=', '$'),
+            ])
+
+            rec.currency_id = currency.id if currency else False
             
     
     def action_confirm(self):
-        self.state = 'pending'
+        self.state = 'transit'
         self.name = self.env['ir.sequence'].next_by_code('purchase.consolidate')
+
+    def action_pending(self):
+        self.state = 'pending'
+        # self.name = self.env['ir.sequence'].next_by_code('purchase.consolidate')
+    
 
     def action_confirm_dos(self):
         self.state = 'done'
@@ -92,6 +103,7 @@ class purchaseConsolidateLine(models.Model):
     consolidate_id = fields.Many2one('purchase.consolidate', string='Producto')
     
     qty = fields.Float('Comprado', related = 'purchase_line_data_id.product_qty')
+    qty_transito = fields.Float('En transito')
     qty_received = fields.Float('Recibido', related = 'purchase_line_data_id.qty_received')
     qty_restant = fields.Float('Pendiente', compute = 'set_qty_restant')
 
@@ -105,6 +117,12 @@ class purchaseConsolidateLine(models.Model):
         ('canel', 'Cancel'),
     ], string='Estado', default = 'draft', related = 'consolidate_id.state')
 
+    @api.onchange('qty_transito')
+    def onchange_qty_transito(self):
+        for rec in self:
+            if rec.qty_transito > rec.qty :
+                raise ValidationError("La cantidad en transito no puede ser mayor a la cantidad comprada.") 
+    
     @api.depends('qty_received','qty')
     def set_qty_restant(self):
         for rec in self:
@@ -116,7 +134,8 @@ class purchaseConsolidateLine(models.Model):
             rec.cost_subtotal = rec.price_unit * rec.qty
     
     def action_desp_set(self):
-        
+        if self.qty_received >= self.qty_transito:
+            raise ValidationError("Ya no puede recibir más productos desde esta consolidación, ya que se alcanzó la cantidad máxima definida en tránsito.") 
         return {
             'name': 'Recepción',
             'view_mode': 'list,form',

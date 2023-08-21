@@ -20,8 +20,8 @@ class purchaseConsolidateWizard(models.TransientModel):
         lines = []
         cost = 0
         for pur in purchase:
-            if pur.invoice_status != 'to invoice':
-               raise ValidationError("No se puede consolidar pedidos de compra que no esten en estado para facturar (%s)" %(pur.name))
+            # if pur.invoice_status != 'to invoice':
+            #    raise ValidationError("No se puede consolidar pedidos de compra que no esten en estado para facturar (%s)" %(pur.name))
             for l in pur.order_line:
                 if  l.product_qty - l.qty_received  > 0:
                     lines.append((
@@ -30,6 +30,7 @@ class purchaseConsolidateWizard(models.TransientModel):
                             'purchase_line_id': pur.id,
                             'purchase_line_data_id': l.id,
                             'qty': l.product_qty - l.qty_received ,
+                            'qty_transito': l.product_qty - l.qty_received ,
                             'price_unit': l.price_unit,
                         },
                     ))
