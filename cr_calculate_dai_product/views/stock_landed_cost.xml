@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_stock_landed_cost_form" model="ir.ui.view">
+        <field name="name">view.stock.landed.cost.form</field>
+        <field name="model">stock.landed.cost</field>
+        <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='final_cost']" position="before">
+                <field name="result_dai"/>
+            </xpath>
+
+            <xpath expr="//field[@name='vendor_bill_id']" position="before">
+                <field name="x_studio_dai_aplicado_1"/>
+            </xpath>
+
+            
+        </field>
+    </record>
+</odoo>
