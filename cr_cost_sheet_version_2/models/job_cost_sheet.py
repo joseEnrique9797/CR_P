@@ -31,14 +31,14 @@ class createDespachos(models.Model):
             ('name', '=', 'Customers')
         ])
         
-        uom_uom = self.env['uom.uom'].search([
-            ('name', '=', 'Unidad')
-        ], limit = 1)  
+        # uom_uom = self.env['uom.uom'].search([
+        #     ('name', '=', 'Unidad')
+        # ], limit = 1)  
         
-        if not uom_uom:
-            uom_uom = self.env['uom.uom'].search([
-                ('name', '=', 'Unidades')
-            ], limit = 1) 
+        # if not uom_uom:
+        #     uom_uom = self.env['uom.uom'].search([
+        #         ('name', '=', 'Unidades')
+        #     ], limit = 1) 
         
         if not stock or not location_dest_id:
             raise UserError('Configure una transferencia de tipo despacho o locacion')
@@ -50,10 +50,11 @@ class createDespachos(models.Model):
             'name':'Borrador', 
             'product_id':self.product_id.id, 
             'product_uom_qty':self.product_desp,
-            'product_uom':uom_uom.id,
+            # 'product_uom':uom_uom.id,
+            'product_uom':self.product_id.uom_id.id,
             
         }) )
-#         raise UserError('Configure una transferencia de tipo despacho %s' %stock)
+        # raise UserError('test 111 %s' %self.product_id.uom_id.name)
         vals = {
 #             'name': 'Borrador',
             'cost_id': self.cost_id.id,
