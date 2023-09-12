@@ -51,13 +51,27 @@ class stockLandedCost(models.Model):
                         'stock_landed_cost_id': cost.id,
                         'company_id': cost.company_id.id,
                     })
+                    if line.result_dai > 0:
+                        valuation_layer = self.env['stock.valuation.layer'].create({
+                            'value': line.result_dai,
+                            'unit_cost': 0,
+                            'quantity': 0,
+                            'remaining_qty': 0,
+                            'stock_valuation_layer_id': linked_layer.id,
+                            'description': cost.name,
+                            'stock_move_id': line.move_id.id,
+                            'product_id': line.move_id.product_id.id,
+                            'stock_landed_cost_id': cost.id,
+                            'company_id': cost.company_id.id,
+                        })
                     linked_layer.remaining_value += cost_to_add
                     valuation_layer_ids.append(valuation_layer.id)
                 # Update the AVCO
                 product = line.move_id.product_id
                 if product.cost_method == 'average':
-                    cost_to_add = cost_to_add + (cost_to_add * line.x_studio_porcentaje_dai_1)
+                    # cost_to_add = cost_to_add + (cost_to_add * line.x_studio_porcentaje_dai_1)
                     # raise UserError("data test=-=222====>%s" %(cost_to_add))
+                    cost_to_add = cost_to_add + line.result_dai
                     cost_to_add_byproduct[product] += cost_to_add
                 # Products with manual inventory valuation are ignored because they do not need to create journal entries.
                 if product.valuation != "real_time":
@@ -94,7 +108,12 @@ class stockLandedCost(models.Model):
                     input_account = accounts['stock_input']
                     all_amls.filtered(lambda aml: aml.account_id == input_account and not aml.reconciled).reconcile()
         
+        
+        
+        # raise UserError("data ======= test=-=222====>%s" %(cost_to_add))
         # print(op44)
+        
+        
         return True
     
 class stockValuationAdjustmentLines(models.Model):
@@ -104,5 +123,10 @@ class stockValuationAdjustmentLines(models.Model):
 
     def set_result_dai(self):
         for rec in self:
-            rec.result_dai = rec.final_cost - rec.former_cost 
+            # rec.result_dai = rec.final_cost - rec.former_cost 
+            rec.result_dai = rec.final_cost * rec.x_studio_porcentaje_dai_1 
+
+
+
+            
             
