@@ -136,27 +136,27 @@ class purchaseConsolidateLine(models.Model):
     def action_desp_set(self):
         if self.qty_received >= self.qty_transito:
             raise ValidationError("Ya no puede recibir más productos desde esta consolidación, ya que se alcanzó la cantidad máxima definida en tránsito.") 
-        return {
-            'name': 'Recepción',
-            'view_mode': 'list,form',
-            'res_model': 'stock.picking',
-            'type': 'ir.actions.act_window',
-            'target': 'current',
-            # 'res_id': self.purchase_ids.ids,
-            'domain': [('purchase_id', '=', self.purchase_line_id.id )],
-        }
-        pass
-        # vendors = self.env['stock.location'].search([
-        #     ('name', '=', 'Vendors')
-        # ], limit = 1)
+        # return {
+        #     'name': 'Recepción',
+        #     'view_mode': 'list,form',
+        #     'res_model': 'stock.picking',
+        #     'type': 'ir.actions.act_window',
+        #     'target': 'current',
+        #     # 'res_id': self.purchase_ids.ids,
+        #     'domain': [('purchase_id', '=', self.purchase_line_id.id )],
+        # }
+        # pass
+        vendors = self.env['stock.location'].search([
+            ('name', '=', 'Vendors')
+        ], limit = 1)
         
-        # stock = self.env['stock.picking.type'].search([
-        #     ('name', '=', 'Recepciones')
-        # ], limit = 1)
+        stock = self.env['stock.picking.type'].search([
+            ('name', '=', 'Recepciones')
+        ], limit = 1)
         
-        # location_dest_id = self.env['stock.location'].search([
-        #     ('name', '=', 'Stock')
-        # ], limit = 1)
+        location_dest_id = self.env['stock.location'].search([
+            ('name', '=', 'Stock')
+        ], limit = 1)
         
         # uom_uom = self.env['uom.uom'].search([
         #     ('name', '=', 'Unidad')
@@ -167,37 +167,36 @@ class purchaseConsolidateLine(models.Model):
         #         ('name', '=', 'Unidades')
         #     ], limit = 1) 
         
-        # if not stock or not location_dest_id:
-        #     raise UserError('Configure una transferencia de tipo recepción o Stock')
+        if not stock or not location_dest_id:
+            raise UserError('Configure una transferencia de tipo recepción o Stock')
         
         
         
-        # lines = []
-        # lines.append( (0,0,{
-        #     'name':'Borrador', 
-        #     'product_id':self.product_id.id, 
-        #     'product_uom_qty':self.qty,
-        #     'product_uom':uom_uom.id,
-            
-        # }) )
+        lines = []
+        lines.append( (0,0,{
+            'name':'Borrador', 
+            'product_id':self.product_id.id, 
+            'product_uom_qty':self.qty_transito,
+            'product_uom':self.product_id.uom_id.id,
+        }) )
         
-        # vals = {
-        #     'picking_type_id': stock.id,
-        #     'location_id': vendors.id,
-        #     'location_dest_id': location_dest_id.id,
-        #     'move_ids_without_package': lines,
-        # }
+        vals = {
+            'picking_type_id': stock.id,
+            'location_id': vendors.id,
+            'location_dest_id': location_dest_id.id,
+            'move_ids_without_package': lines,
+        }
         
-        # obj = self.env['stock.picking'].create(vals)
-        # return {
-        #     'name': 'Recepción',
-        #     'view_type': 'form',
-        #     'view_mode': 'tree,form',
-        #     'res_model': 'stock.picking',
-        #     'domain': [('id', '=', obj.id)],
-        #     'type': 'ir.actions.act_window',
-        #     'target': 'current',
-        # }
+        obj = self.env['stock.picking'].create(vals)
+        return {
+            'name': 'Recepción',
+            'view_type': 'form',
+            'view_mode': 'tree,form',
+            'res_model': 'stock.picking',
+            'domain': [('id', '=', obj.id)],
+            'type': 'ir.actions.act_window',
+            'target': 'current',
+        }
  
 
     

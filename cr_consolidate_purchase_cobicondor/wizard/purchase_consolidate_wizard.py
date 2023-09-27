@@ -35,6 +35,10 @@ class purchaseConsolidateWizard(models.TransientModel):
                         },
                     ))
                     cost += l.price_unit
+            
+            pur.consolidate_apply = True
+            # raise ValidationError("== 11111 =======>%s " %(pur.consolidate_apply)) 
+            # pur.consolidate_apply = True
         # self.env['ir.sequence'].next_by_code('purchase.consolidate')
         data_partner = self.get_ids_partners(purchase)
         create_obj = self.env['purchase.consolidate'].create({
