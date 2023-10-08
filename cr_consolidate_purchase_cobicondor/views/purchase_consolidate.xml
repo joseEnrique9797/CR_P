@@ -60,6 +60,8 @@
                 <field name="state" invisible = "1" />
                 
                 <field name="qty" force_save = "1" />
+                
+                <field name="qty_available_before_transito" force_save = "1" />
                 <field name="qty_transito" force_save = "1" />
                 <field name="qty_received" force_save = "1" />
                 <field name="qty_restant" force_save = "1" />
@@ -155,6 +157,7 @@
                                         <field name="state" invisible = "1" readonly= "1" />
                                         
                                         <field name="qty" force_save = "1" readonly= "1" />
+                                        <field name="qty_available_before_transito" force_save = "1" />
                                         <field name="qty_transito" force_save = "1" attrs="{'readonly': [('state', 'in', ['draft','cancel','done'])]}" />
                                         <field name="qty_received" force_save = "1" readonly= "1" />
                                         <field name="qty_restant" force_save = "1" readonly= "1" />

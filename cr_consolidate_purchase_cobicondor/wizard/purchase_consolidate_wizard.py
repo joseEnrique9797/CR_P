@@ -24,13 +24,27 @@ class purchaseConsolidateWizard(models.TransientModel):
             #    raise ValidationError("No se puede consolidar pedidos de compra que no esten en estado para facturar (%s)" %(pur.name))
             for l in pur.order_line:
                 if  l.product_qty - l.qty_received  > 0:
+                    
+                    other_lines = pur.env['purchase.consolidate.line'].search([
+                        # ('id','!=',rec.id),
+                        ('state','=','pending'),
+                        ('purchase_line_id','=',pur.id),
+                        ('product_id','=',l.product_id.id),
+                    ])
+        
+                    total = sum(x.qty_transito for x in other_lines)
+                    
+                    qty_available_before_transito = (l.product_qty - l.qty_received) - total
+                    
+                    
                     lines.append((
                         0, 0, {
                             'product_id': l.product_id.id,
                             'purchase_line_id': pur.id,
                             'purchase_line_data_id': l.id,
                             'qty': l.product_qty - l.qty_received ,
-                            'qty_transito': l.product_qty - l.qty_received ,
+                            'qty_available_before_transito': qty_available_before_transito ,
+                            'qty_transito': qty_available_before_transito ,
                             'price_unit': l.price_unit,
                         },
                     ))

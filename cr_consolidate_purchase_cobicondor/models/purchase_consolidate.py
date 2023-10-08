@@ -28,6 +28,52 @@ class purchaseConsolidate(models.Model):
     currency_id = fields.Many2one('res.currency', string='Moneda', compute = 'set_company_currency_id')
     cost_total = fields.Monetary('Costo total', compute = 'set_cost_total_consolidate')
 
+
+    @api.returns("self", lambda value: value.id)
+    def copy(self, default=None):
+        result = super(purchaseConsolidate, self).copy(default=default)
+        purchase = self.purchase_ids
+
+        lines = []
+        cost = 0
+        for pur in purchase:
+            for l in pur.order_line:
+                if  l.product_qty - l.qty_received  > 0:
+
+                    other_lines = pur.env['purchase.consolidate.line'].search([
+                        # ('id','!=',rec.id),
+                        ('state','=','pending'),
+                        ('purchase_line_id','=',pur.id),
+                        ('product_id','=',l.product_id.id),
+                    ])
+        
+                    total = sum(x.qty_transito for x in other_lines)
+                    
+                    qty_available_before_transito = (l.product_qty - l.qty_received) - total
+
+                    
+                    
+                    lines.append((
+                        0, 0, {
+                            'product_id': l.product_id.id,
+                            'purchase_line_id': pur.id,
+                            'purchase_line_data_id': l.id,
+                            'qty': l.product_qty - l.qty_received ,
+                            'qty_available_before_transito': qty_available_before_transito ,
+                            'qty_transito': qty_available_before_transito ,
+                            'price_unit': l.price_unit,
+                            'consolidate_id': result.id,
+                        },
+                    ))
+                    cost += l.price_unit
+            
+        result.write({
+            'line_ids':lines,
+        })
+        
+        return result
+
+    
     def action_cancel(self):
         self.state = 'cancel'
     
@@ -40,11 +86,11 @@ class purchaseConsolidate(models.Model):
             rec.cost_total = total
             
     
-    def unlink(self):
-        for rec in self:
-           if rec.state != 'draft':
-               raise ValidationError("No se puede borrar una consolidacion en estado confirmado")
-        return super(purchaseConsolidate,self).unlink()
+    # def unlink(self):
+    #     for rec in self:
+    #        if rec.state != 'draft':
+    #            raise ValidationError("No se puede borrar una consolidacion en estado confirmado")
+    #     return super(purchaseConsolidate,self).unlink()
 
     def set_company_currency_id(self):
         for rec in self:
@@ -103,6 +149,8 @@ class purchaseConsolidateLine(models.Model):
     consolidate_id = fields.Many2one('purchase.consolidate', string='Producto')
     
     qty = fields.Float('Comprado', related = 'purchase_line_data_id.product_qty')
+    # compute = 'get_qty_available_before_transito'
+    qty_available_before_transito = fields.Float('Comprado (Menos transito)')
     qty_transito = fields.Float('En transito')
     qty_received = fields.Float('Recibido', related = 'purchase_line_data_id.qty_received')
     qty_restant = fields.Float('Pendiente', compute = 'set_qty_restant')
@@ -113,14 +161,32 @@ class purchaseConsolidateLine(models.Model):
 
     state = fields.Selection([
         ('draft', 'Borrador'),
+        ('transit', 'En transito'),
+        ('pending', 'Recibido'),
         ('done', 'Confirmado'),
-        ('canel', 'Cancel'),
+        ('cancel', 'Cancelado'),
     ], string='Estado', default = 'draft', related = 'consolidate_id.state')
 
+    # def get_qty_available_before_transito(self):
+    #     for rec in self:
+
+    #         rec.qty_available_before_transito = 0
+    #         other_lines = rec.env['purchase.consolidate.line'].search([
+    #             ('id','!=',rec.id),
+    #             ('state','=','pending'),
+    #             ('purchase_line_id','=',rec.purchase_line_id.id),
+    #             ('product_id','=',rec.product_id.id),
+    #         ])
+
+    #         total = sum(x.qty_transito for x in other_lines)
+            
+    #         rec.qty_available_before_transito = rec.qty - total
+            
+    
     @api.onchange('qty_transito')
     def onchange_qty_transito(self):
         for rec in self:
-            if rec.qty_transito > rec.qty :
+            if rec.qty_transito > rec.qty_available_before_transito :
                 raise ValidationError("La cantidad en transito no puede ser mayor a la cantidad comprada.") 
     
     @api.depends('qty_received','qty')
