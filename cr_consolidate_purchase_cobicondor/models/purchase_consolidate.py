@@ -107,8 +107,8 @@ class purchaseConsolidate(models.Model):
             rec.currency_id = currency.id if currency else False
 
     def action_receive_all(self):
-        if self.qty_received >= self.qty_transito:
-            raise ValidationError("Ya no puede recibir más productos desde esta consolidación, ya que se alcanzó la cantidad máxima definida en tránsito.") 
+        # if self.qty_received >= self.qty_transito:
+        #     raise ValidationError("Ya no puede recibir más productos desde esta consolidación, ya que se alcanzó la cantidad máxima definida en tránsito.") 
         # return {
         #     'name': 'Recepción',
         #     'view_mode': 'list,form',
@@ -142,23 +142,28 @@ class purchaseConsolidate(models.Model):
         
         if not stock or not location_dest_id:
             raise UserError('Configure una transferencia de tipo recepción o Stock')
-        
-        
-        
+
+
         lines = []
-        lines.append( (0,0,{
-            'name':'Borrador', 
-            'product_id':self.product_id.id, 
-            'product_uom_qty':self.qty_transito,
-            'product_uom':self.product_id.uom_id.id,
-        }) )
-        
+        purchase_line_ids = []
+        for line in self.line_ids:
+            total = line.qty_transito - line.qty_received
+            if total > 0 :
+                lines.append( (0,0,{
+                    'name':'Borrador', 
+                    'product_id':line.product_id.id, 
+                    'product_uom_qty':line.qty_transito,
+                    'product_uom':line.product_id.uom_id.id,
+                }) )
+
+                purchase_line_ids.append(line.purchase_line_id.id)
+            
         vals = {
             'picking_type_id': stock.id,
             'location_id': vendors.id,
             'location_dest_id': location_dest_id.id,
-            'consolidate_id': self.consolidate_id.id,
-            'order_consolidate_ids': [(6,0,[self.purchase_line_id.id])],
+            'consolidate_id': self.id,
+            'order_consolidate_ids': [(6,0,purchase_line_ids)],
             'move_ids_without_package': lines,
         }
         
