@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+purchase_consolidate_wizard,purchase_consolidate_wizard,model_purchase_consolidate_wizard,,1,1,1,1
+
+purchase_consolidate,purchase_consolidate,model_purchase_consolidate,,1,1,1,1
+purchase_consolidate_line,purchase_consolidate_line,model_purchase_consolidate_line,,1,1,1,1
+
+
+
+
+

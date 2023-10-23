@@ -25,6 +25,7 @@ class purchaseConsolidate(models.Model):
     partner_list_ids = fields.Many2many('res.partner', string='Proveedores')
 
     purchase_count = fields.Integer('', compute = 'set_purchase_count')
+    picking_count = fields.Integer('', compute = 'set_picking_count')
     currency_id = fields.Many2one('res.currency', string='Moneda', compute = 'set_company_currency_id')
     cost_total = fields.Monetary('Costo total', compute = 'set_cost_total_consolidate')
 
@@ -104,7 +105,74 @@ class purchaseConsolidate(models.Model):
             ])
 
             rec.currency_id = currency.id if currency else False
-            
+
+    def action_receive_all(self):
+        if self.qty_received >= self.qty_transito:
+            raise ValidationError("Ya no puede recibir más productos desde esta consolidación, ya que se alcanzó la cantidad máxima definida en tránsito.") 
+        # return {
+        #     'name': 'Recepción',
+        #     'view_mode': 'list,form',
+        #     'res_model': 'stock.picking',
+        #     'type': 'ir.actions.act_window',
+        #     'target': 'current',
+        #     # 'res_id': self.purchase_ids.ids,
+        #     'domain': [('purchase_id', '=', self.purchase_line_id.id )],
+        # }
+        # pass
+        vendors = self.env['stock.location'].search([
+            ('name', '=', 'Vendors')
+        ], limit = 1)
+        
+        stock = self.env['stock.picking.type'].search([
+            ('name', '=', 'Recepciones')
+        ], limit = 1)
+        
+        location_dest_id = self.env['stock.location'].search([
+            ('name', '=', 'Stock')
+        ], limit = 1)
+        
+        # uom_uom = self.env['uom.uom'].search([
+        #     ('name', '=', 'Unidad')
+        # ], limit = 1)  
+        
+        # if not uom_uom:
+        #     uom_uom = self.env['uom.uom'].search([
+        #         ('name', '=', 'Unidades')
+        #     ], limit = 1) 
+        
+        if not stock or not location_dest_id:
+            raise UserError('Configure una transferencia de tipo recepción o Stock')
+        
+        
+        
+        lines = []
+        lines.append( (0,0,{
+            'name':'Borrador', 
+            'product_id':self.product_id.id, 
+            'product_uom_qty':self.qty_transito,
+            'product_uom':self.product_id.uom_id.id,
+        }) )
+        
+        vals = {
+            'picking_type_id': stock.id,
+            'location_id': vendors.id,
+            'location_dest_id': location_dest_id.id,
+            'consolidate_id': self.consolidate_id.id,
+            'order_consolidate_ids': [(6,0,[self.purchase_line_id.id])],
+            'move_ids_without_package': lines,
+        }
+        
+        obj = self.env['stock.picking'].create(vals)
+        return {
+            'name': 'Recepción',
+            'view_type': 'form',
+            'view_mode': 'tree,form',
+            'res_model': 'stock.picking',
+            'domain': [('id', '=', obj.id)],
+            'type': 'ir.actions.act_window',
+            'target': 'current',
+        }
+            # print(' action_receive_all ===================> ')
     
     def action_confirm(self):
         self.state = 'transit'
@@ -122,6 +190,13 @@ class purchaseConsolidate(models.Model):
         for rec in self:
             rec.purchase_count = len(rec.purchase_ids)
     
+    def set_picking_count(self):
+        picking = self.env['stock.picking'].search([
+            ('consolidate_id', '=', self.id)
+        ])
+        for rec in self:
+            rec.picking_count = len(picking)
+    
     def purchase_list_get(self):
         return {
             'name': 'Ordenes de compra',
@@ -131,6 +206,20 @@ class purchaseConsolidate(models.Model):
             'target': 'current',
             # 'res_id': self.purchase_ids.ids,
             'domain': [('id', 'in', self.purchase_ids.ids )],
+        }
+
+    def picking_list_get(self):
+        picking = self.env['stock.picking'].search([
+            ('consolidate_id', '=', self.id)
+        ])
+        return {
+            'name': 'Recibimientos',
+            'view_mode': 'list,form',
+            'res_model': 'stock.picking',
+            'type': 'ir.actions.act_window',
+            'target': 'current',
+            # 'res_id': self.purchase_ids.ids,
+            'domain': [('id', 'in', picking.ids )],
         }
 
     
@@ -152,7 +241,7 @@ class purchaseConsolidateLine(models.Model):
     # compute = 'get_qty_available_before_transito'
     qty_available_before_transito = fields.Float('Comprado (Menos transito)')
     qty_transito = fields.Float('En transito')
-    qty_received = fields.Float('Recibido', related = 'purchase_line_data_id.qty_received')
+    qty_received = fields.Float('Recibido', compute = 'set_qty_received' )
     qty_restant = fields.Float('Pendiente', compute = 'set_qty_restant')
 
     
@@ -188,6 +277,20 @@ class purchaseConsolidateLine(models.Model):
         for rec in self:
             if rec.qty_transito > rec.qty_available_before_transito :
                 raise ValidationError("La cantidad en transito no puede ser mayor a la cantidad comprada.") 
+    
+    def set_qty_received(self):
+        for rec in self:
+            picking = self.env['stock.picking'].search([
+                ('consolidate_id', '=', rec.consolidate_id.id)
+            ])
+            rec.qty_received = 0
+            count = 0
+            for p in picking.filtered(lambda x:x.state == 'done' and rec.purchase_line_id.id in x.order_consolidate_ids.ids):
+                for line_p in p.move_ids_without_package:
+                    if line_p.product_id.id == rec.product_id.id:
+                        count += line_p.quantity_done
+
+            rec.qty_received = count
     
     @api.depends('qty_received','qty')
     def set_qty_restant(self):
@@ -250,6 +353,8 @@ class purchaseConsolidateLine(models.Model):
             'picking_type_id': stock.id,
             'location_id': vendors.id,
             'location_dest_id': location_dest_id.id,
+            'consolidate_id': self.consolidate_id.id,
+            'order_consolidate_ids': [(6,0,[self.purchase_line_id.id])],
             'move_ids_without_package': lines,
         }
         

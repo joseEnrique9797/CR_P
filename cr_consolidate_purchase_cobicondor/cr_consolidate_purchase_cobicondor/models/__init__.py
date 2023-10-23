@@ -2,5 +2,4 @@
 
 from . import models
 from . import purchase_consolidate
-from . import purchase_order
-from . import stock_picking
+from . import stock_move
