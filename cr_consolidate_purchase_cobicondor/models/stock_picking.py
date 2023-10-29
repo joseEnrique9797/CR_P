@@ -9,3 +9,9 @@ class stockPicking(models.Model):
 
     consolidate_id = fields.Many2one('purchase.consolidate', string='Consolidacion')
     order_consolidate_ids = fields.Many2many('purchase.order', string='Proveedores')
+
+class stockMove(models.Model):
+    _inherit = "stock.move"
+
+    consolidate_line_id = fields.Many2one('purchase.consolidate.line', string='linea Consolidacion')
+    

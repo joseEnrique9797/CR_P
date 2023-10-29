@@ -117,6 +117,8 @@
             <field name="arch" type="xml">
                 <form string="Follow-up Steps">
                     <header>
+
+                        <button string="Crear factura" name="action_account_move" type="object" class="btn-primary"/>
                         
                         <button string="Definir número de embarque" attrs="{'invisible': [('state', '!=', 'draft')]}"  name="action_confirm" type="object" class="btn-primary"/>
 

@@ -7,7 +7,7 @@ from odoo.exceptions import ValidationError
 class purchaseConsolidate(models.Model):
     _name = "purchase.consolidate"
 
-    
+    receive_all = fields.Boolean('', default = False)
     name = fields.Char('Número')
     num_emb = fields.Char('Número de embarque')
     date = fields.Date('Fecha')
@@ -29,7 +29,39 @@ class purchaseConsolidate(models.Model):
     currency_id = fields.Many2one('res.currency', string='Moneda', compute = 'set_company_currency_id')
     cost_total = fields.Monetary('Costo total', compute = 'set_cost_total_consolidate')
 
+    def action_account_move(self):
+        
+        lines = []
+        
+        account = self.env['account.move']
 
+        for line in self.line_ids:
+            
+            lines.append( (0,0,{
+                'product_id':line.product_id.id, 
+                'quantity':line.qty_transito, 
+            }) )
+
+
+        vals = {
+            'line_ids': lines,
+        }
+
+        
+
+        obj = account.create(vals)
+
+        return {
+            'name': 'Recepción',
+            'view_type': 'form',
+            'view_mode': 'tree,form',
+            'res_model': 'account.move',
+            'domain': [('id', '=', obj.id)],
+            'type': 'ir.actions.act_window',
+            'target': 'current',
+        }
+        
+    
     @api.returns("self", lambda value: value.id)
     def copy(self, default=None):
         result = super(purchaseConsolidate, self).copy(default=default)
@@ -152,6 +184,7 @@ class purchaseConsolidate(models.Model):
                 lines.append( (0,0,{
                     'name':'Borrador', 
                     'product_id':line.product_id.id, 
+                    'consolidate_line_id':line.id, 
                     'product_uom_qty':line.qty_transito,
                     'product_uom':line.product_id.uom_id.id,
                 }) )
@@ -164,10 +197,14 @@ class purchaseConsolidate(models.Model):
             'location_dest_id': location_dest_id.id,
             'consolidate_id': self.id,
             'order_consolidate_ids': [(6,0,purchase_line_ids)],
-            'move_ids_without_package': lines,
+            # 'move_ids_without_package': lines,
+            'move_lines': lines,
+            	
         }
         
         obj = self.env['stock.picking'].create(vals)
+        self.receive_all = True
+        self.state = 'done'
         return {
             'name': 'Recepción',
             'view_type': 'form',
@@ -292,7 +329,10 @@ class purchaseConsolidateLine(models.Model):
             count = 0
             for p in picking.filtered(lambda x:x.state == 'done' and rec.purchase_line_id.id in x.order_consolidate_ids.ids):
                 for line_p in p.move_ids_without_package:
-                    if line_p.product_id.id == rec.product_id.id:
+                    if rec.consolidate_id.receive_all:
+                        count = rec.qty_transito
+                    
+                    elif line_p.product_id.id == rec.product_id.id and line_p.consolidate_line_id.id == rec.id:
                         count += line_p.quantity_done
 
             rec.qty_received = count
@@ -300,7 +340,7 @@ class purchaseConsolidateLine(models.Model):
     @api.depends('qty_received','qty')
     def set_qty_restant(self):
         for rec in self:
-            rec.qty_restant = rec.qty - rec.qty_received 
+            rec.qty_restant = rec.qty_transito - rec.qty_received 
     
     @api.depends('price_unit','qty')
     def set_cost_subtotal(self):
@@ -359,6 +399,7 @@ class purchaseConsolidateLine(models.Model):
             'location_id': vendors.id,
             'location_dest_id': location_dest_id.id,
             'consolidate_id': self.consolidate_id.id,
+            'consolidate_line_id':self.id, 
             'order_consolidate_ids': [(6,0,[self.purchase_line_id.id])],
             'move_ids_without_package': lines,
         }
