@@ -118,7 +118,7 @@
                 <form string="Follow-up Steps">
                     <header>
 
-                        <button string="Crear factura" name="action_account_move" type="object" class="btn-primary"/>
+                        <button string="Crear factura" name="action_account_move"  attrs="{'invisible': [('state', 'not in', ['pending','done'])]}" type="object" class="btn-primary"/>
                         
                         <button string="Definir número de embarque" attrs="{'invisible': [('state', '!=', 'draft')]}"  name="action_confirm" type="object" class="btn-primary"/>
 
@@ -131,11 +131,15 @@
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                            <button class="oe_stat_button" name="purchase_list_get" type="object" icon="fa-list-ol ">
+                            <button class="oe_stat_button" name="account_move_list" type="object" icon="fa-money ">
+                                <field name="move_count" widget="statinfo" string="Facturas"/>
+                            </button>
+                            
+                            <button class="oe_stat_button" name="purchase_list_get" type="object" icon="fa-shopping-cart ">
                                 <field name="purchase_count" widget="statinfo" string="Ordenes de compra"/>
                             </button>
                             
-                            <button class="oe_stat_button" name="picking_list_get" type="object" icon="fa-list-ol ">
+                            <button class="oe_stat_button" name="picking_list_get" type="object" icon="fa-check-square-o ">
                                 <field name="picking_count" widget="statinfo" string="Recibimiento"/>
                             </button>
                         </div>
@@ -144,7 +148,7 @@
                                 <field name="name" attrs="{'invisible': [('name', '=', False)]}" readonly = "1" />
                                 <field name="date" string = "Fecha de Creación" readonly = "1" />
                                 <field name="cost_total" readonly = "1" />
-                                <field name="num_emb" required = "1" />
+                                <field name="num_emb"  attrs="{'readonly': [('state', '!=', 'draft')]}" required = "1" />
                                 
                                 <!-- <field name="create_by_id" readonly = "1" /> -->
                             </group>

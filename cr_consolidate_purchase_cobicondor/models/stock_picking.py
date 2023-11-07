@@ -14,4 +14,10 @@ class stockMove(models.Model):
     _inherit = "stock.move"
 
     consolidate_line_id = fields.Many2one('purchase.consolidate.line', string='linea Consolidacion')
-    
+
+class stockMove(models.Model):
+    _inherit = "account.move"
+
+    consolidate_id = fields.Many2one('purchase.consolidate', string='Consolidacion')
+
+

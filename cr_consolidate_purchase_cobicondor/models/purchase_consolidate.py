@@ -8,7 +8,7 @@ class purchaseConsolidate(models.Model):
     _name = "purchase.consolidate"
 
     receive_all = fields.Boolean('', default = False)
-    name = fields.Char('Número')
+    name = fields.Char('Número', copy = False)
     num_emb = fields.Char('Número de embarque')
     date = fields.Date('Fecha')
     state = fields.Selection([
@@ -24,33 +24,66 @@ class purchaseConsolidate(models.Model):
     
     partner_list_ids = fields.Many2many('res.partner', string='Proveedores')
 
+    move_count = fields.Integer('', compute = 'set_move_count')
     purchase_count = fields.Integer('', compute = 'set_purchase_count')
     picking_count = fields.Integer('', compute = 'set_picking_count')
     currency_id = fields.Many2one('res.currency', string='Moneda', compute = 'set_company_currency_id')
     cost_total = fields.Monetary('Costo total', compute = 'set_cost_total_consolidate')
 
+
+    def account_move_list(self):
+        accounts = self.env['account.move'].search([
+            ('consolidate_id', '=', self.id)
+        ])
+        return {
+            'name': 'Facturas',
+            'view_mode': 'list,form',
+            'res_model': 'account.move',
+            'type': 'ir.actions.act_window',
+            'target': 'current',
+            # 'res_id': self.purchase_ids.ids,
+            'domain': [('id', 'in', accounts.ids )],
+        }
+    
     def action_account_move(self):
         
         lines = []
         
         account = self.env['account.move']
 
+        account_move = self.env['account.account'].search([
+            ('deprecated', '=', False),
+            ('user_type_id.type', 'not in', ['receivable', 'payable']),
+        ], limit = 1)
+        
         for line in self.line_ids:
             
             lines.append( (0,0,{
                 'product_id':line.product_id.id, 
-                'quantity':line.qty_transito, 
+                'quantity':line.qty_received, 
+                'price_unit':line.price_unit, 
+                'account_id':account_move.id, 
             }) )
 
 
         vals = {
-            'line_ids': lines,
+            'invoice_line_ids': lines,
+            'move_type':'out_invoice',
+            'consolidate_id':self.id,
+            'partner_id':self.partner_list_ids[0].id if self.partner_list_ids else False,
+            # 'invoice_line_ids': lines,
         }
 
         
 
         obj = account.create(vals)
-
+        # obj.write({
+        #     'line_ids':lines
+        # })
+        # for line in obj.line_ids:
+        #     line.price_unit
+        
+        
         return {
             'name': 'Recepción',
             'view_type': 'form',
@@ -75,7 +108,7 @@ class purchaseConsolidate(models.Model):
 
                     other_lines = pur.env['purchase.consolidate.line'].search([
                         # ('id','!=',rec.id),
-                        ('state','=','pending'),
+                        ('state','in',['pending','done']),
                         ('purchase_line_id','=',pur.id),
                         ('product_id','=',l.product_id.id),
                     ])
@@ -227,6 +260,16 @@ class purchaseConsolidate(models.Model):
 
     def action_confirm_dos(self):
         self.state = 'done'
+    
+    def set_move_count(self):
+        for rec in self:
+            
+            accounts = rec.env['account.move'].search([
+                ('consolidate_id', '=', rec.id)
+            ])
+            
+            rec.move_count = len(accounts)
+    
     
     def set_purchase_count(self):
         for rec in self:
@@ -392,6 +435,7 @@ class purchaseConsolidateLine(models.Model):
             'product_id':self.product_id.id, 
             'product_uom_qty':self.qty_transito,
             'product_uom':self.product_id.uom_id.id,
+            'consolidate_line_id':self.id, 
         }) )
         
         vals = {
@@ -399,7 +443,6 @@ class purchaseConsolidateLine(models.Model):
             'location_id': vendors.id,
             'location_dest_id': location_dest_id.id,
             'consolidate_id': self.consolidate_id.id,
-            'consolidate_line_id':self.id, 
             'order_consolidate_ids': [(6,0,[self.purchase_line_id.id])],
             'move_ids_without_package': lines,
         }
