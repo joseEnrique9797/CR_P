@@ -23,6 +23,32 @@
       </field>
     </record>
 
+
+    <record id="purchase_agg_wizard_form" model="ir.ui.view">
+      <field name="name">purchase.agg.wizard.form</field>
+      <field name="model">purchase.agg</field>
+      <field name="arch" type="xml">
+         
+        <form >
+          <sheet>
+              <group>
+                  <h6>
+                      Seleccione las ordenes de compra que desea agregar a la consolidación
+                  </h6>
+                  <!-- <field name = "purchase_ids" /> -->
+                  <!-- domain="[('id', 'not in', purchase_ids )]" -->
+                  <field name="purchase_new_ids"  string = "Ordenes de compra" widget = "many2many_tags" />
+              </group>
+              
+          </sheet>
+          <footer>
+              <button string="Agregar" name="action_confirm" type="object" class="btn-primary"/>
+              <button string="Cancelar" class="btn-secondary" special="cancel"/>
+          </footer>
+        </form>
+      </field>
+    </record>
+
      
   </data>
 </odoo>  

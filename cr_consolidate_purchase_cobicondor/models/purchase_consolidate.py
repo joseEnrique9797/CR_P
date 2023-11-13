@@ -31,6 +31,16 @@ class purchaseConsolidate(models.Model):
     cost_total = fields.Monetary('Costo total', compute = 'set_cost_total_consolidate')
 
 
+    def action_agg_purchase(self):
+        return {
+            'name': 'Ordenes de compra',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'purchase.agg',
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+        }
+
     def account_move_list(self):
         accounts = self.env['account.move'].search([
             ('consolidate_id', '=', self.id)

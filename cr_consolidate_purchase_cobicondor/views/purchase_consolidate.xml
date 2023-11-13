@@ -118,6 +118,8 @@
                 <form string="Follow-up Steps">
                     <header>
 
+                        <button string="Agregar ordenes de compra" name="action_agg_purchase"  attrs="{'invisible': [('state', 'not in', ['draft'])]}" type="object" class="btn-primary"/>
+                        
                         <button string="Crear factura" name="action_account_move"  attrs="{'invisible': [('state', 'not in', ['pending','done'])]}" type="object" class="btn-primary"/>
                         
                         <button string="Definir número de embarque" attrs="{'invisible': [('state', '!=', 'draft')]}"  name="action_confirm" type="object" class="btn-primary"/>
